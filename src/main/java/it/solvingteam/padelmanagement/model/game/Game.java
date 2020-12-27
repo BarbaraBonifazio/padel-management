@@ -24,7 +24,7 @@ public class Game {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	private Boolean payed;
+	private Boolean paid;
 	private Integer missingPlayers;
 	private LocalDate date;
 
@@ -34,7 +34,7 @@ public class Game {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "player_id", nullable = false)
-	private Player player;
+	private Player gameCreator;
 
 	@ManyToMany
 	@JoinTable(name = "game_player", joinColumns = @JoinColumn(name = "game_id", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "player_id", referencedColumnName = "ID"))
@@ -60,12 +60,12 @@ public class Game {
 		this.date = date;
 	}
 
-	public Boolean getPayed() {
-		return payed;
+	public Boolean getPaid() {
+		return paid;
 	}
 
-	public void setPayed(Boolean payed) {
-		this.payed = payed;
+	public void setPaid(Boolean paid) {
+		this.paid = paid;
 	}
 
 	public Integer getMissingPlayers() {
@@ -84,12 +84,12 @@ public class Game {
 		this.court = court;
 	}
 
-	public Player getPlayer() {
-		return player;
+	public Player getGameCreator() {
+		return gameCreator;
 	}
 
-	public void setPlayer(Player player) {
-		this.player = player;
+	public void setGameCreator(Player gameCreator) {
+		this.gameCreator = gameCreator;
 	}
 
 	public List<Player> getOtherPlayers() {

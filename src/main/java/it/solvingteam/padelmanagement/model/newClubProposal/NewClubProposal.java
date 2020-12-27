@@ -24,6 +24,7 @@ public class NewClubProposal {
 	private Long id;
 	private String name;
 	private String city;
+	private String address;
 
 	@Enumerated(EnumType.STRING)
 	private ProposalStatus proposalStatus;
@@ -35,7 +36,7 @@ public class NewClubProposal {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", nullable = false)
-	private User userCreator;
+	private User clubCreator;
 
 	public Long getId() {
 		return id;
@@ -61,6 +62,14 @@ public class NewClubProposal {
 		this.city = city;
 	}
 
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
 	public ProposalStatus getProposalStatus() {
 		return proposalStatus;
 	}
@@ -77,12 +86,12 @@ public class NewClubProposal {
 		this.logo = logo;
 	}
 
-	public User getUserCreator() {
-		return userCreator;
+	public User getClubCreator() {
+		return clubCreator;
 	}
 
-	public void setUserCreator(User userCreator) {
-		this.userCreator = userCreator;
+	public void setClubCreator(User clubCreator) {
+		this.clubCreator = clubCreator;
 	}
 
 }

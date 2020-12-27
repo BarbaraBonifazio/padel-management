@@ -9,6 +9,7 @@ public class NewClubProposalDto {
 	private String id;
 	private String name;
 	private String city;
+	private String address;
 	private String proposalStatus;
 	private Byte[] logo;
 	
@@ -37,6 +38,14 @@ public class NewClubProposalDto {
 
 	public void setCity(String city) {
 		this.city = city;
+	}
+	
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public String getProposalStatus() {

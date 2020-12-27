@@ -19,7 +19,7 @@ public class Court {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long courtId;
+	private Long id;
 	private String name;
 	private Boolean isInactive;
 	
@@ -30,12 +30,12 @@ public class Court {
 	@OneToMany(mappedBy = "court")
 	private List<Game> games;
 
-	public Long getCourtId() {
-		return courtId;
+	public Long getId() {
+		return id;
 	}
 
-	public void setCourtId(Long courtId) {
-		this.courtId = courtId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getName() {

@@ -34,7 +34,7 @@ public class Player {
 	@JoinColumn(name = "club_id", nullable = false)
 	private Club club;
 	
-	@OneToMany(mappedBy = "player")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "gameCreator")
 	private List<Game> games = new ArrayList<>();
 
 	public Long getId() {

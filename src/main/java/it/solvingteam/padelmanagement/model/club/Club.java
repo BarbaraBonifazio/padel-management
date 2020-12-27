@@ -28,9 +28,9 @@ public class Club {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
 	private String name;
 	private String city;
+	private String address;
 	
 	@Lob @Basic(fetch = FetchType.EAGER)
 	@Column(name = "LOGO")
@@ -74,6 +74,14 @@ public class Club {
 
 	public void setCity(String city) {
 		this.city = city;
+	}
+	
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public Byte[] getLogo() {

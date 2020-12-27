@@ -30,11 +30,11 @@ public class GameMapper extends AbstractMapper<Game, GameDto>{
 		GameDto dto = new GameDto();
 		
 		dto.setId(String.valueOf(entity.getId()));
-		dto.setPayed(entity.getPayed());
+		dto.setPaid(entity.getPaid());
 		dto.setMissingPlayers(String.valueOf(entity.getMissingPlayers()));
 		dto.setDate(String.valueOf(entity.getDate()));
 		dto.setCourtDto(courtMapper.convertEntityToDto(entity.getCourt()));
-		dto.setPlayerDto(playerMapper.convertEntityToDto(entity.getPlayer()));
+		dto.setPlayerDto(playerMapper.convertEntityToDto(entity.getGameCreator()));
 		dto.setPlayersDto(playerMapper.convertEntityToDto(entity.getOtherPlayers()));
 		
 		return dto;
@@ -51,11 +51,11 @@ public class GameMapper extends AbstractMapper<Game, GameDto>{
 		
 		Game entity = new Game();
 		entity.setId(Long.parseLong(dto.getId()));
-		entity.setPayed(dto.getPayed());
+		entity.setPaid(dto.getPaid());
 		entity.setMissingPlayers(Integer.parseInt(dto.getMissingPlayers()));
 		entity.setDate(LocalDate.parse(dto.getDate()));
 		entity.setCourt(courtMapper.convertDtoToEntity(dto.getCourtDto()));
-		entity.setPlayer(playerMapper.convertDtoToEntity(dto.getPlayerDto()));
+		entity.setGameCreator(playerMapper.convertDtoToEntity(dto.getPlayerDto()));
 		entity.setOtherPlayers(playerMapper.convertDtoToEntity(dto.getPlayersDto()));
 		
 		return entity;		

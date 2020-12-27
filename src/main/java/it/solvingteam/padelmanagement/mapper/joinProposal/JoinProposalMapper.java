@@ -30,7 +30,7 @@ public class JoinProposalMapper extends AbstractMapper<JoinProposal, JoinProposa
 
 		dto.setId(String.valueOf(entity.getId()));
 		dto.setUserLevel(String.valueOf(entity.getUserLevel()));
-		dto.setUserDto(userMapper.convertEntityToDto(entity.getUserCreator()));
+		dto.setUserDto(userMapper.convertEntityToDto(entity.getAssociate()));
 		dto.setClubDto(clubMapper.convertEntityToDto(entity.getClub()));
 
 		return dto;
@@ -46,7 +46,7 @@ public class JoinProposalMapper extends AbstractMapper<JoinProposal, JoinProposa
 
 		entity.setId(Long.parseLong(dto.getId()));
 		entity.setUserLevel(Integer.parseInt(dto.getUserLevel()));
-		entity.setUserCreator(userMapper.convertDtoToEntity(dto.getUserDto()));
+		entity.setAssociate(userMapper.convertDtoToEntity(dto.getUserDto()));
 		entity.setClub(clubMapper.convertDtoToEntity(dto.getClubDto()));
 
 		return entity;

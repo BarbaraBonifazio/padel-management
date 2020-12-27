@@ -34,6 +34,7 @@ public class ClubMapper extends AbstractMapper<Club, ClubDto> {
 		dto.setName(entity.getName());
 		dto.setCity(entity.getCity());
 		dto.setLogo(entity.getLogo());
+		dto.setAddress(entity.getAddress());
 		dto.setJoinProposalsDto(joinProposalMapper.convertEntityToDto(entity.getJoinProposals()));
 		dto.setNoticesDto(noticeMapper.convertEntityToDto(entity.getNotices()));
 		dto.setCourtsDto(courtMapper.convertEntityToDto(entity.getCourts()));
@@ -54,6 +55,7 @@ public class ClubMapper extends AbstractMapper<Club, ClubDto> {
 		club.setName(dto.getName());
 		club.setCity(dto.getCity());
 		club.setLogo(dto.getLogo());
+		club.setAddress(dto.getAddress());
 		club.setJoinProposals(joinProposalMapper.convertDtoToEntity(dto.getJoinProposalsDto()));
 		club.setNotices(noticeMapper.convertDtoToEntity(dto.getNoticesDto()));
 		club.setCourts(courtMapper.convertDtoToEntity(dto.getCourtsDto()));

@@ -9,7 +9,7 @@ public class GameDto {
 
 	@NotNull
 	private String id;
-	private Boolean payed;
+	private Boolean paid;
 	private String missingPlayers;
 	private String date;
 	
@@ -27,11 +27,11 @@ public class GameDto {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public Boolean getPayed() {
-		return payed;
+	public Boolean getPaid() {
+		return paid;
 	}
-	public void setPayed(Boolean payed) {
-		this.payed = payed;
+	public void setPaid(Boolean paid) {
+		this.paid = paid;
 	}
 	public String getMissingPlayers() {
 		return missingPlayers;
@@ -72,7 +72,7 @@ public class GameDto {
 	}
 	@Override
 	public String toString() {
-		return " " + payed + " " + missingPlayers + " " + date + " ";
+		return " " + paid + " " + missingPlayers + " " + date + " ";
 	}
 
 }

@@ -18,7 +18,7 @@ public class Slot {
 	@Enumerated(EnumType.STRING)
 	private SlotName slotName;
 	
-	Slot(Integer id, Integer hour, Integer minute, SlotName slotName) {
+	public Slot(Integer id, Integer hour, Integer minute, SlotName slotName) {
 		this.id=id;
 		this.hour=hour;
 		this.minute=minute;
@@ -56,7 +56,6 @@ public class Slot {
 	public void setSlotName(SlotName slotName) {
 		this.slotName = slotName;
 	}
-	
 	
 	public static SlotName convertHoursAndMinutesToSlot (Integer hour,Integer minute) {
 		switch (hour) {

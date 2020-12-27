@@ -12,6 +12,7 @@ public class ClubDto {
 	private String name;
 	private String city;
 	private Byte[] logo;
+	private String address;
 	
 	@Valid
 	private AdminDto adminDto;
@@ -47,6 +48,12 @@ public class ClubDto {
 	}
 	public void setLogo(Byte[] logo) {
 		this.logo = logo;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
 	}
 	public AdminDto getAdminDto() {
 		return adminDto;
