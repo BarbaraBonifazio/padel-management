@@ -20,10 +20,8 @@ public class Court {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long courtId;
-	
 	private String name;
 	private Boolean isInactive;
-	private Integer bookingFee;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "club_id", nullable = false)
@@ -54,14 +52,6 @@ public class Court {
 
 	public void setIsInactive(Boolean isInactive) {
 		this.isInactive = isInactive;
-	}
-
-	public Integer getBookingFee() {
-		return bookingFee;
-	}
-
-	public void setBookingFee(Integer bookingFee) {
-		this.bookingFee = bookingFee;
 	}
 
 	public Club getClub() {

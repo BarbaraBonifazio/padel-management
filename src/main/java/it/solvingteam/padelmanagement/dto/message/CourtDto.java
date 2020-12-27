@@ -12,7 +12,6 @@ public class CourtDto {
 	
 	private String name;
 	private Boolean isInactive;
-	private String bookingFee;
 	
 	@Valid
 	private ClubDto clubDto;
@@ -36,12 +35,6 @@ public class CourtDto {
 	public void setIsInactive(Boolean isInactive) {
 		this.isInactive = isInactive;
 	}
-	public String getBookingFee() {
-		return bookingFee;
-	}
-	public void setBookingFee(String bookingFee) {
-		this.bookingFee = bookingFee;
-	}
 	public ClubDto getClubDto() {
 		return clubDto;
 	}
@@ -57,7 +50,7 @@ public class CourtDto {
 	
 	@Override
 	public String toString() {
-		return " " + name + " " + isInactive + " " + bookingFee + " ";
+		return " " + name + " " + isInactive + " ";
 	}
 	
 }
