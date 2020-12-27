@@ -26,7 +26,7 @@ public class NewClubProposalMapper extends AbstractMapper<NewClubProposal, NewCl
 		dto.setName(entity.getName());
 		dto.setCity(entity.getCity());
 		dto.setLogo(entity.getLogo());
-		dto.setUserDto(userMapper.convertEntityToDto(entity.getUser()));
+		dto.setUserDto(userMapper.convertEntityToDto(entity.getUserCreator()));
 		
 		return dto;
 	}
@@ -43,7 +43,7 @@ public class NewClubProposalMapper extends AbstractMapper<NewClubProposal, NewCl
 		entity.setName(dto.getName());
 		entity.setCity(dto.getCity());
 		entity.setLogo(dto.getLogo());
-		entity.setUser(userMapper.convertDtoToEntity(dto.getUserDto()));
+		entity.setUserCreator(userMapper.convertDtoToEntity(dto.getUserDto()));
 		
 		return entity;
 	}

@@ -14,6 +14,8 @@ public class ClubDto {
 	private Byte[] logo;
 	
 	@Valid
+	private AdminDto adminDto;
+	@Valid
 	private List<JoinProposalDto> joinProposalsDto;
 	@Valid
 	private List<NoticeDto> noticesDto;
@@ -45,6 +47,12 @@ public class ClubDto {
 	}
 	public void setLogo(Byte[] logo) {
 		this.logo = logo;
+	}
+	public AdminDto getAdminDto() {
+		return adminDto;
+	}
+	public void setAdminDto(AdminDto adminDto) {
+		this.adminDto = adminDto;
 	}
 	public List<JoinProposalDto> getJoinProposalsDto() {
 		return joinProposalsDto;

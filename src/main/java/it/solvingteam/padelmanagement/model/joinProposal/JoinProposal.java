@@ -27,7 +27,7 @@ public class JoinProposal {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", nullable = false)
-	private User user;
+	private User userCreator;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "club_id", nullable = false)
@@ -57,12 +57,12 @@ public class JoinProposal {
 		this.proposalStatus = proposalStatus;
 	}
 
-	public User getUser() {
-		return user;
+	public User getUserCreator() {
+		return userCreator;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setUserCreator(User userCreator) {
+		this.userCreator = userCreator;
 	}
 
 	public Club getClub() {

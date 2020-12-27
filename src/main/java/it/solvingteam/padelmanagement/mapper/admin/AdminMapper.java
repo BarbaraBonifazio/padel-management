@@ -26,7 +26,6 @@ public class AdminMapper extends AbstractMapper<Admin, AdminDto> {
 		AdminDto dto = new AdminDto();
 
 		dto.setId(String.valueOf(entity.getId()));
-		dto.setClubDto(clubMapper.convertEntityToDto(entity.getClub()));
 		dto.setUserDto(userMapper.convertEntityToDto(entity.getUser()));
 
 		return dto;
@@ -42,7 +41,6 @@ public class AdminMapper extends AbstractMapper<Admin, AdminDto> {
 		Admin admin = new Admin();
 
 		admin.setId(Long.parseLong(dto.getId()));
-		admin.setClub(clubMapper.convertDtoToEntity(dto.getClubDto()));
 		admin.setUser(userMapper.convertDtoToEntity(dto.getUserDto()));
 
 		return admin;

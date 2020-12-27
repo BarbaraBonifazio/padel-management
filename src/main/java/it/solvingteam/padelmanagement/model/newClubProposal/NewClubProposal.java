@@ -1,7 +1,6 @@
 package it.solvingteam.padelmanagement.model.newClubProposal;
 
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -12,7 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 
 import it.solvingteam.padelmanagement.model.ProposalStatus;
 import it.solvingteam.padelmanagement.model.user.User;
@@ -34,9 +33,9 @@ public class NewClubProposal {
 	@Column(name = "LOGO")
 	private Byte[] logo;
 
-	@OneToOne(cascade = CascadeType.REMOVE)
-	@JoinColumn(name = "user_id", referencedColumnName = "id")
-	private User user;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id", nullable = false)
+	private User userCreator;
 
 	public Long getId() {
 		return id;
@@ -78,12 +77,12 @@ public class NewClubProposal {
 		this.logo = logo;
 	}
 
-	public User getUser() {
-		return user;
+	public User getUserCreator() {
+		return userCreator;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setUserCreator(User userCreator) {
+		this.userCreator = userCreator;
 	}
 
 }

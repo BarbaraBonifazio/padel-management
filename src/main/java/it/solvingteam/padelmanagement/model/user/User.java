@@ -1,11 +1,8 @@
 package it.solvingteam.padelmanagement.model.user;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -14,13 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-
-import it.solvingteam.padelmanagement.model.joinProposal.JoinProposal;
-import it.solvingteam.padelmanagement.model.newClubProposal.NewClubProposal;
 
 @Entity
 public class User {
@@ -43,13 +34,6 @@ public class User {
 
 	@Enumerated(EnumType.STRING)
 	private Role role;
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", orphanRemoval = true)
-	private List<JoinProposal> joinProposals = new ArrayList<>();
-	
-	@OneToOne(cascade = CascadeType.REMOVE)
-	@JoinColumn(name = "newClubProposal_id", referencedColumnName = "id")
-	private NewClubProposal newClubProposal;
 
 	public Long getId() {
 		return id;
@@ -129,22 +113,6 @@ public class User {
 
 	public void setRole(Role role) {
 		this.role = role;
-	}
-
-	public List<JoinProposal> getJoinProposals() {
-		return joinProposals;
-	}
-
-	public void setJoinProposals(List<JoinProposal> joinProposals) {
-		this.joinProposals = joinProposals;
-	}
-
-	public NewClubProposal getNewClubProposal() {
-		return newClubProposal;
-	}
-
-	public void setNewClubProposal(NewClubProposal newClubProposal) {
-		this.newClubProposal = newClubProposal;
 	}
 	
 }

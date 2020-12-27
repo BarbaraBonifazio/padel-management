@@ -36,8 +36,6 @@ public class UserMapper extends AbstractMapper<User, UserDto>{
 		dto.setUsername(entity.getUsername());
 		dto.setPassword(entity.getPassword());
 		dto.setProfilePic(entity.getProfilePic());
-		dto.setJoinProposalDto(joinProposalMapper.convertEntityToDto(entity.getJoinProposals()));
-		dto.setNewClubProposalDto(newClubProposalMapper.convertEntityToDto(entity.getNewClubProposal()));
 
 		return dto;
 	}
@@ -59,8 +57,6 @@ public class UserMapper extends AbstractMapper<User, UserDto>{
 		user.setUsername(dto.getUsername());
 		user.setPassword(dto.getPassword());
 		user.setProfilePic(dto.getProfilePic());
-		user.setJoinProposals(joinProposalMapper.convertDtoToEntity(dto.getJoinProposalDto()));
-		user.setNewClubProposal(newClubProposalMapper.convertDtoToEntity(dto.getNewClubProposalDto()));
 		
 		return user;
 	}
