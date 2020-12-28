@@ -1,4 +1,4 @@
-package it.solvingteam.padelmanagement.dto.message;
+package it.solvingteam.padelmanagement.dto;
 
 import java.util.List;
 

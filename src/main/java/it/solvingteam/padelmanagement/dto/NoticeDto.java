@@ -1,4 +1,4 @@
-package it.solvingteam.padelmanagement.dto.message;
+package it.solvingteam.padelmanagement.dto;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;

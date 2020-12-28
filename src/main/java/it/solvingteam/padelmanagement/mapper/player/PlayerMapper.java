@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import it.solvingteam.padelmanagement.dto.message.PlayerDto;
+import it.solvingteam.padelmanagement.dto.PlayerDto;
 import it.solvingteam.padelmanagement.mapper.AbstractMapper;
 import it.solvingteam.padelmanagement.mapper.club.ClubMapper;
 import it.solvingteam.padelmanagement.mapper.game.GameMapper;

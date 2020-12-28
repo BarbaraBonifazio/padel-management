@@ -3,7 +3,7 @@ package it.solvingteam.padelmanagement.mapper.admin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import it.solvingteam.padelmanagement.dto.message.AdminDto;
+import it.solvingteam.padelmanagement.dto.AdminDto;
 import it.solvingteam.padelmanagement.mapper.AbstractMapper;
 import it.solvingteam.padelmanagement.mapper.club.ClubMapper;
 import it.solvingteam.padelmanagement.mapper.user.UserMapper;

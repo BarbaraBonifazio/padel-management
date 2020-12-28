@@ -1,39 +1,39 @@
-package it.solvingteam.padelmanagement.dto.message;
+package it.solvingteam.padelmanagement.dto;
 
 import java.util.List;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-public class CourtDto {
+public class PlayerDto {
 
 	@NotNull
 	private String id;
+	private String playerLevel;
 	
-	private String name;
-	private Boolean isInactive;
-	
+	@Valid
+	private UserDto userDto;
 	@Valid
 	private ClubDto clubDto;
 	@Valid
-	List<GameDto> gamesDto;
+	private List<GameDto> gamesDto;
 	public String getId() {
 		return id;
 	}
 	public void setId(String id) {
 		this.id = id;
 	}
-	public String getName() {
-		return name;
+	public String getPlayerLevel() {
+		return playerLevel;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setPlayerLevel(String playerLevel) {
+		this.playerLevel = playerLevel;
 	}
-	public Boolean getIsInactive() {
-		return isInactive;
+	public UserDto getUserDto() {
+		return userDto;
 	}
-	public void setIsInactive(Boolean isInactive) {
-		this.isInactive = isInactive;
+	public void setUserDto(UserDto userDto) {
+		this.userDto = userDto;
 	}
 	public ClubDto getClubDto() {
 		return clubDto;
@@ -50,7 +50,7 @@ public class CourtDto {
 	
 	@Override
 	public String toString() {
-		return " " + name + " " + isInactive + " ";
+		return " Players level = " + playerLevel + " ";
 	}
 	
 }

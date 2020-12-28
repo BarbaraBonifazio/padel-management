@@ -1,8 +1,5 @@
-package it.solvingteam.padelmanagement.dto.message;
+package it.solvingteam.padelmanagement.dto;
 
-import java.util.List;
-
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 public class UserDto {
@@ -18,11 +15,6 @@ public class UserDto {
 	private String password;
 	private String role;
 	private Byte[] profilePic;
-	
-	@Valid
-	private List<JoinProposalDto> joinProposalDto;
-	@Valid
-	private NewClubProposalDto newClubProposalDto; 
 	
 	public String getId() {
 		return id;
@@ -83,19 +75,6 @@ public class UserDto {
 	}
 	public void setProfilePic(Byte[] profilePic) {
 		this.profilePic = profilePic;
-	}
-	public List<JoinProposalDto> getJoinProposalDto() {
-		return joinProposalDto;
-	}
-	public void setJoinProposalDto(List<JoinProposalDto> joinProposalDto) {
-		this.joinProposalDto = joinProposalDto;
-	}
-	
-	public NewClubProposalDto getNewClubProposalDto() {
-		return newClubProposalDto;
-	}
-	public void setNewClubProposalDto(NewClubProposalDto newClubProposalDto) {
-		this.newClubProposalDto = newClubProposalDto;
 	}
 	@Override
 	public String toString() {

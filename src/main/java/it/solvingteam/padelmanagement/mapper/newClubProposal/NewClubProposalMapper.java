@@ -3,7 +3,7 @@ package it.solvingteam.padelmanagement.mapper.newClubProposal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import it.solvingteam.padelmanagement.dto.message.NewClubProposalDto;
+import it.solvingteam.padelmanagement.dto.NewClubProposalDto;
 import it.solvingteam.padelmanagement.mapper.AbstractMapper;
 import it.solvingteam.padelmanagement.mapper.user.UserMapper;
 import it.solvingteam.padelmanagement.model.newClubProposal.NewClubProposal;
