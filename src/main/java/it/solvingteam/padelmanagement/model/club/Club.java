@@ -143,4 +143,15 @@ public class Club {
 		this.players = players;
 	}
 	
+	@Override
+	public String toString() {
+		return " Nome = " + " " + name + 
+				" \n " +
+				" Città = " + city + 
+				" \n " +
+				" Indirizzo = " + address + 
+				" \n " +
+				" Amministratore Circolo = " + admin + " ";
+	}
+	
 }

@@ -73,4 +73,21 @@ public class JoinProposal {
 		this.club = club;
 	}
 	
+	@Override
+	public String toString() {
+		return " Livello di gioco = " + " " + userLevel + 
+				" \n " +
+				" Stato proposta = " + proposalStatus + 
+				" \n " +
+				" \n " +
+				" Riepilogo dati personali: " +
+					" \n " +
+					aspiringAssociate + 
+					" \n " +
+					" \n " +
+				" Dati Circolo: " + 
+					" \n " +
+					club + " ";
+	}
+	
 }

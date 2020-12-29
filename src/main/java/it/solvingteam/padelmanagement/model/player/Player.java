@@ -37,6 +37,17 @@ public class Player {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "gameCreator")
 	private List<Game> games = new ArrayList<>();
 
+	public Player() {
+		
+	}
+	
+	public Player(Integer playerLevel, User user, Club club) {
+		super();
+		this.playerLevel = playerLevel;
+		this.user = user;
+		this.club = club;
+	}
+
 	public Long getId() {
 		return id;
 	}

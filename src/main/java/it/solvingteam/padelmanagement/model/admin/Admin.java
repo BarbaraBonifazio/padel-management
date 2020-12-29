@@ -36,5 +36,10 @@ public class Admin {
 	public void setUser(User user) {
 		this.user = user;
 	}
+	
+	@Override
+	public String toString() {
+		return " " + user.getName() + " " + user.getSurname() + " ";
+	}
 
 }

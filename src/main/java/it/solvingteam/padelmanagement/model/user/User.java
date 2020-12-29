@@ -115,4 +115,15 @@ public class User {
 		this.role = role;
 	}
 	
+	@Override
+	public String toString() {
+		return " Nome = " + " " + name + 
+				" \n " +
+				" Cognome = " + surname + 
+				" \n " +
+				" Data di Nascita = " + dateOfBirth + 
+				" \n " +
+				" Username = " + username + " ";
+	}
+	
 }
