@@ -45,6 +45,8 @@ public class UserController {
 		UserDto userDto = userService.signIn(loginUserDto.getUsername(), loginUserDto.getPassword());
 	
 	return ResponseEntity.status(HttpStatus.OK).body(userDto);
-}
+	}
+	
+	
 	
 }
