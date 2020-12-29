@@ -45,7 +45,10 @@ public class CourtMapper extends AbstractMapper<Court, CourtDto>{
 		
 		Court entity = new Court();
 		
-		entity.setId(Long.parseLong(dto.getId()));
+		if(dto.getId() != null) {
+			entity.setId(Long.parseLong(dto.getId()));
+		}
+		
 		entity.setName(dto.getName());
 		entity.setIsInactive(dto.getIsInactive());
 		entity.setClub(clubMapper.convertDtoToEntity(dto.getClubDto()));

@@ -48,7 +48,10 @@ public class PlayerMapper extends AbstractMapper<Player, PlayerDto>{
 		
 		Player entity = new Player();
 		
-		entity.setId(Long.parseLong(dto.getId()));
+		if(dto.getId() != null) {
+			entity.setId(Long.parseLong(dto.getId()));
+		}
+		
 		entity.setPlayerLevel(Integer.parseInt(dto.getPlayerLevel()));
 		entity.setUser(userMapper.convertDtoToEntity(dto.getUserDto()));
 		entity.setClub(clubMapper.convertDtoToEntity(dto.getClubDto()));

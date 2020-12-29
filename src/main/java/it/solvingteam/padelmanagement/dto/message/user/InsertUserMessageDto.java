@@ -23,6 +23,8 @@ public class InsertUserMessageDto {
 	@NotBlank
 	@Size(message = "inserisci un numero con il prefisso", max = 13, min = 13)
 	private String mobile;
+	
+	private String role;
 
 	private Byte[] profilePic;
 
@@ -88,6 +90,14 @@ public class InsertUserMessageDto {
 
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
+	}
+	
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 	public Byte[] getProfilePic() {

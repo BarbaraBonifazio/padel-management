@@ -35,7 +35,7 @@ public class UserController {
 		if(bindingResult.hasErrors()) {
 			throw new BindingResultException(bindingResult);
 		}
-		userService.signup(insertUserMessageDto);
+		insertUserMessageDto = userService.signup(insertUserMessageDto);
 		return ResponseEntity.status(HttpStatus.OK).body(insertUserMessageDto);
 	}
 	

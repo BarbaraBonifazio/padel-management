@@ -44,7 +44,10 @@ public class JoinProposalMapper extends AbstractMapper<JoinProposal, JoinProposa
 
 		JoinProposal entity = new JoinProposal();
 
-		entity.setId(Long.parseLong(dto.getId()));
+		if(dto.getId() != null) {
+			entity.setId(Long.parseLong(dto.getId()));
+		}
+		
 		entity.setUserLevel(Integer.parseInt(dto.getUserLevel()));
 		entity.setAssociate(userMapper.convertDtoToEntity(dto.getUserDto()));
 		entity.setClub(clubMapper.convertDtoToEntity(dto.getClubDto()));

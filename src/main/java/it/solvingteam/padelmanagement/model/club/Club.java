@@ -52,6 +52,17 @@ public class Club {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "club", orphanRemoval = true)
 	private List<Player> players = new ArrayList<>();
 
+	public Club() {
+	}
+	
+	public Club(String name, String city, String address, Admin admin) {
+		super();
+		this.name = name;
+		this.city = city;
+		this.address = address;
+		this.admin = admin;
+	}
+
 	public Long getId() {
 		return id;
 	}

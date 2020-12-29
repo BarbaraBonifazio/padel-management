@@ -50,7 +50,11 @@ public class GameMapper extends AbstractMapper<Game, GameDto>{
 		}
 		
 		Game entity = new Game();
-		entity.setId(Long.parseLong(dto.getId()));
+		
+		if(dto.getId() != null) {
+			entity.setId(Long.parseLong(dto.getId()));
+		}
+		
 		entity.setPaid(dto.getPaid());
 		entity.setMissingPlayers(Integer.parseInt(dto.getMissingPlayers()));
 		entity.setDate(LocalDate.parse(dto.getDate()));

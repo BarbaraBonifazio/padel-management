@@ -29,13 +29,13 @@ public class UserService {
     }
     
        
-    public void signup(InsertUserMessageDto insertUserMessageDto){
+    public InsertUserMessageDto signup(InsertUserMessageDto insertUserMessageDto){
     	
         User user = userMapper.convertDtoInsertToEntity(insertUserMessageDto);
 //        user.setPassword(passwordEncoder.encode(insertUserMessageDto.getPassword()));
         user.setRole(Role.ROLE_GUEST);
-
         this.userRepository.save(user);
+        return userMapper.convertEntityToDtoInsert(user);
     }
 
 
@@ -46,6 +46,14 @@ public class UserService {
 			throw new Exception("Errore! Credenziali non valide!");
 		}
 		return userDto;
+	}
+	
+	public User findById(Long userId) {
+		return userRepository.findById(userId).get();
+	}
+	
+	public User updateUserRole(User user) {
+		return userRepository.save(user);
 	}
     
 //  //signup per lo User Rappresentante Nazione

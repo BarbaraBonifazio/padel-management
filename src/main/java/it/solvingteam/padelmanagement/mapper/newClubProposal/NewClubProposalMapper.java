@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import it.solvingteam.padelmanagement.dto.NewClubProposalDto;
+import it.solvingteam.padelmanagement.dto.message.newClubProposal.InsertNewClubProposalDto;
 import it.solvingteam.padelmanagement.mapper.AbstractMapper;
 import it.solvingteam.padelmanagement.mapper.user.UserMapper;
 import it.solvingteam.padelmanagement.model.newClubProposal.NewClubProposal;
@@ -27,6 +28,24 @@ public class NewClubProposalMapper extends AbstractMapper<NewClubProposal, NewCl
 		dto.setCity(entity.getCity());
 		dto.setAddress(entity.getAddress());
 		dto.setLogo(entity.getLogo());
+		dto.setProposalStatus(String.valueOf(entity.getProposalStatus()));
+		dto.setUserDto(userMapper.convertEntityToDto(entity.getClubCreator()));
+		
+		return dto;
+	}
+	
+	public InsertNewClubProposalDto convertEntityToDtoInsert(NewClubProposal entity) {
+		if(entity == null) {
+			return null;
+		}
+		
+		InsertNewClubProposalDto dto = new InsertNewClubProposalDto();
+		
+		dto.setName(entity.getName());
+		dto.setCity(entity.getCity());
+		dto.setAddress(entity.getAddress());
+		dto.setLogo(entity.getLogo());
+		dto.setProposalStatus(String.valueOf(entity.getProposalStatus()));
 		dto.setUserDto(userMapper.convertEntityToDto(entity.getClubCreator()));
 		
 		return dto;
@@ -40,7 +59,26 @@ public class NewClubProposalMapper extends AbstractMapper<NewClubProposal, NewCl
 		
 		NewClubProposal entity = new NewClubProposal();
 		
-		entity.setId(Long.parseLong(dto.getId()));
+		if(dto.getId() != null) {
+			entity.setId(Long.parseLong(dto.getId()));
+		}
+		
+		entity.setName(dto.getName());
+		entity.setCity(dto.getCity());
+		entity.setAddress(dto.getAddress());
+		entity.setLogo(dto.getLogo());
+		entity.setClubCreator(userMapper.convertDtoToEntity(dto.getUserDto()));
+		
+		return entity;
+	}
+	
+	public NewClubProposal convertDtoInsertToEntity(InsertNewClubProposalDto dto) {
+		if(dto == null) {
+			return null;
+		}
+		
+		NewClubProposal entity = new NewClubProposal();
+		
 		entity.setName(dto.getName());
 		entity.setCity(dto.getCity());
 		entity.setAddress(dto.getAddress());

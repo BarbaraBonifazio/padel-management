@@ -57,6 +57,7 @@ public class UserMapper extends AbstractMapper<User, UserDto>{
 		dto.setDateOfBirth(String.valueOf(entity.getDateOfBirth()));
 		dto.setUsername(entity.getUsername());
 		dto.setPassword(entity.getPassword());
+		dto.setRole(String.valueOf(entity.getRole()));
 		dto.setProfilePic(entity.getProfilePic());
 
 		return dto;
@@ -70,7 +71,10 @@ public class UserMapper extends AbstractMapper<User, UserDto>{
 		
 		User user = new User();
 		
-		user.setId(Long.parseLong(dto.getId()));
+		if(dto.getId() != null) {
+			user.setId(Long.parseLong(dto.getId()));
+		}
+		
 		user.setName(dto.getName());
 		user.setSurname(dto.getSurname());
 		user.setMailAddress(dto.getMailAddress());

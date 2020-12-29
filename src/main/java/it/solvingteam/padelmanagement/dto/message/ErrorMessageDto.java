@@ -4,7 +4,7 @@ import java.util.List;
 
 public class ErrorMessageDto {
 
-	    List<String> errors;
+	    private List<String> errors;
 
 		public ErrorMessageDto(List<String> errors) {
 	        this.errors = errors;
