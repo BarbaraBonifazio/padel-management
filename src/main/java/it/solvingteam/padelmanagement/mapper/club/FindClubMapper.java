@@ -43,7 +43,7 @@ public class FindClubMapper extends AbstractMapper<Club, ClubDto> {
 		club.setAddress(dto.getAddress());
 		club.setAdmin(adminMapper.convertDtoToEntity(dto.getAdminDto()));
 		
-		return null;
+		return club;
 	}
 
 }

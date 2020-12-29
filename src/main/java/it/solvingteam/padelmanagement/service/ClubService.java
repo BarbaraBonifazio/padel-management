@@ -27,4 +27,8 @@ public class ClubService {
 		return clubDtoList;
 	}
 
+	public Club findById(Long id) {
+		return this.clubRepository.findById(id).get();
+	}
+
 }

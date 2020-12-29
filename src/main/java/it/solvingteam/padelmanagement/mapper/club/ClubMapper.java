@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import it.solvingteam.padelmanagement.dto.ClubDto;
+import it.solvingteam.padelmanagement.dto.message.club.ClubDtoForJoinProposal;
 import it.solvingteam.padelmanagement.mapper.AbstractMapper;
 import it.solvingteam.padelmanagement.mapper.court.CourtMapper;
 import it.solvingteam.padelmanagement.mapper.joinProposal.JoinProposalMapper;
@@ -39,6 +40,18 @@ public class ClubMapper extends AbstractMapper<Club, ClubDto> {
 		dto.setNoticesDto(noticeMapper.convertEntityToDto(entity.getNotices()));
 		dto.setCourtsDto(courtMapper.convertEntityToDto(entity.getCourts()));
 		dto.setPlayersDto(playerMapper.convertEntityToDto(entity.getPlayers()));
+
+		return dto;
+
+	}
+	
+	public ClubDtoForJoinProposal convertEntityToDtoForJoinProposal(Club entity) {
+		if (entity == null) {
+			return null;
+		}
+
+		ClubDtoForJoinProposal dto = new ClubDtoForJoinProposal();
+		dto.setId(String.valueOf(entity.getId()));
 
 		return dto;
 
