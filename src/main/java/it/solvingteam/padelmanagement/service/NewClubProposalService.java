@@ -29,6 +29,8 @@ public class NewClubProposalService {
 	AdminService adminService;
 	@Autowired
 	ClubService clubService;
+	@Autowired
+	EmailService emailService;
 
 	public InsertNewClubProposalDto insert(InsertNewClubProposalDto insertNewClubProposalDto){
     	
@@ -63,6 +65,10 @@ public class NewClubProposalService {
 			throw new Exception("L'id fornito non è stato trovato!");
 		}
 		
+		if(!(newClubProposal.getProposalStatus() == ProposalStatus.PENDING) ){
+	        throw new Exception("Proposta già gestita!");
+	    }
+		
 		newClubProposal.setProposalStatus(ProposalStatus.APPROVED);
 		this.update(newClubProposal);
 		
@@ -74,9 +80,16 @@ public class NewClubProposalService {
 		
 		newClub = clubService.insert(newClub);
 		
-
-		//manda mail di conferma all'indirizzo mail dello user che è diventato Admin
-		
+		emailService.sendMail(user.getMailAddress(), " Proposta Circolo Approvata ", 
+							" Gentile Utente " + user.getName() + " " + user.getSurname() + ", " 
+							+ "\n" + "\n" +
+							"la seguente proposta è stata approvata: " + " \n " + newClubProposal.toString() + " "
+							+ "\n" + "\n" + 
+							" Il Suo nuovo ruolo è: " + user.getRole() + " "
+							+ "\n" + "\n" +
+							"Cordiali saluti, "
+							+ "\n" +
+							"- Team Padel Management");
 	}
 	
 	public void clubRejection(String idNewClubProposal) throws Exception {
@@ -90,10 +103,23 @@ public class NewClubProposalService {
 			throw new Exception("L'id fornito non è stato trovato!");
 		}
 		
+		if(!(newClubProposal.getProposalStatus() == ProposalStatus.PENDING) ){
+	        throw new Exception("Proposta già gestita!");
+	    }
+		
 		newClubProposal.setProposalStatus(ProposalStatus.REJECTED);
 		this.update(newClubProposal);		
 
-		//manda mail di conferma all'indirizzo mail dello user che è rimasto Guest
+		User user = userService.findById(newClubProposal.getClubCreator().getId());
+		
+		emailService.sendMail(user.getMailAddress(), " Proposta Circolo Rifiutata ", 
+				" Gentile Utente " + user.getName() + " " + user.getSurname() + ", " 
+				+ "\n" + "\n" +
+				"ci dispiace informarLa che la seguente proposta è stata rifiutata: " + " \n " + newClubProposal.toString() + " "
+				+ "\n" + "\n" +
+				"Cordiali saluti, "
+				+ "\n" +
+				"- Team Padel Management");
 		
 	}
 	

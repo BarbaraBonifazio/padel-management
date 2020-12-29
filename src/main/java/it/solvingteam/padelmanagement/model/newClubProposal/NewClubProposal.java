@@ -1,5 +1,7 @@
 package it.solvingteam.padelmanagement.model.newClubProposal;
 
+import java.util.Arrays;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -94,4 +96,15 @@ public class NewClubProposal {
 		this.clubCreator = clubCreator;
 	}
 
+	@Override
+	public String toString() {
+		return " Nome = " + " " + name + 
+				" \n " +
+				" Città = " + city + 
+				" \n " +
+				" Indirizzo = " + address + 
+				" \n " +
+				" " + Arrays.toString(logo) + " ";
+	}
+	
 }
