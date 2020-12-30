@@ -1,5 +1,7 @@
 package it.solvingteam.padelmanagement.service;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +44,12 @@ public class CourtService {
 	public CourtDto findCourtDtoById(Long id) {
 		 Court entity = this.courtRepository.findById(id).get();
 		 return courtMapper.convertEntityToDto(entity);
+	}
+
+	public List<CourtDto> findAll(String adminId) {
+		Club club = clubService.findClubByAdmin(Long.parseLong(adminId));
+		List<Court> courts = courtRepository.findAllCourtByClub_Id(club.getId());
+		return courtMapper.convertEntityToDto(courts);
 	}
 	
 	
