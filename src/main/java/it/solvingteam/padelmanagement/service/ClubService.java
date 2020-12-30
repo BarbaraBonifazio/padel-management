@@ -31,4 +31,8 @@ public class ClubService {
 		return this.clubRepository.findById(id).get();
 	}
 
+	public Club findClubByAdmin(Long adminId) {
+		return this.clubRepository.findByAdmin_Id(adminId);
+	}
+
 }

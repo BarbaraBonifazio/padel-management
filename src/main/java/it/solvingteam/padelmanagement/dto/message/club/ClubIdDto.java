@@ -2,7 +2,7 @@ package it.solvingteam.padelmanagement.dto.message.club;
 
 import javax.validation.constraints.NotNull;
 
-public class ClubDtoForJoinProposal {
+public class ClubIdDto {
 
 	@NotNull
 	private String id;

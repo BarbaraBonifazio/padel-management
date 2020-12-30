@@ -21,7 +21,11 @@ public class AdminService {
 		user = userService.updateUserRole(user);
 		Admin admin = new Admin();
 		admin.setUser(user);
-		return adminRepository.save(admin);
+		return this.adminRepository.save(admin);
+	}
+
+	public Admin findById(Long id) {
+		return this.adminRepository.findById(id).get();
 	}
 	
 }

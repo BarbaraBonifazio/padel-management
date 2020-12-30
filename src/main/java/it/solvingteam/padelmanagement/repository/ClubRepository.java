@@ -6,4 +6,6 @@ import it.solvingteam.padelmanagement.model.club.Club;
 
 public interface ClubRepository extends JpaRepository<Club, Long>{
 
+	Club findByAdmin_Id(Long adminId);
+
 }

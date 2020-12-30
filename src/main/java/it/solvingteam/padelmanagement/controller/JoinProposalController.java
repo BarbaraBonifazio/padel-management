@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,9 +42,9 @@ public class JoinProposalController {
 		return ResponseEntity.status(HttpStatus.OK).body(joinProposalDto);
 	}
 	
-	@GetMapping("/")
-	public ResponseEntity<List<JoinProposalDto>> findAll(){
-		List<JoinProposalDto> joinProposalsDto = joinProposalService.findAll();
+	@GetMapping("/{id}")
+	public ResponseEntity<List<JoinProposalDto>> findAll(@PathVariable Long id){
+		List<JoinProposalDto> joinProposalsDto = joinProposalService.findAllByClub(id);
 		 return ResponseEntity.status(HttpStatus.OK).body(joinProposalsDto);
 	}
 	

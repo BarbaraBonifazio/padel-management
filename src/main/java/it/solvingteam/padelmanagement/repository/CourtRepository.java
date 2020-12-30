@@ -6,4 +6,5 @@ import it.solvingteam.padelmanagement.model.court.Court;
 
 public interface CourtRepository extends JpaRepository<Court, Long>{
 
+
 }
