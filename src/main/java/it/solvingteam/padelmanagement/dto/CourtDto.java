@@ -2,21 +2,20 @@ package it.solvingteam.padelmanagement.dto;
 
 import java.util.List;
 
-import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class CourtDto {
 
 	@NotNull
 	private String id;
-	
+	@NotBlank
 	private String name;
+	@NotNull
 	private Boolean isInactive;
-	
-	@Valid
 	private ClubDto clubDto;
-	@Valid
 	List<GameDto> gamesDto;
+	
 	public String getId() {
 		return id;
 	}
