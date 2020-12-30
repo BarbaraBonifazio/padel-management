@@ -51,6 +51,7 @@ public class CourtService {
 		List<Court> courts = courtRepository.findAllCourtByClub_Id(club.getId());
 		return courtMapper.convertEntityToDto(courts);
 	}
+
 	
 	
 	

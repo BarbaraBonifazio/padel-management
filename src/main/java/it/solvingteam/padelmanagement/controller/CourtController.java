@@ -48,4 +48,10 @@ public class CourtController {
 		 return ResponseEntity.status(HttpStatus.OK).body(courtDto);
 	}
 	
+	@GetMapping("/{courtId}")
+	public ResponseEntity<CourtDto> show(@PathVariable String courtId){
+		CourtDto courtDto = courtService.findCourtDtoById(Long.parseLong(courtId));
+		 return ResponseEntity.status(HttpStatus.OK).body(courtDto);
+	}
+	
 }
