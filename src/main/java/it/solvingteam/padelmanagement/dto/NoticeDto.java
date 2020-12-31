@@ -1,16 +1,13 @@
 package it.solvingteam.padelmanagement.dto;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 public class NoticeDto {
 
-	@NotNull
 	private String id;
+	@NotBlank
 	private String message;
 	private String creationDate;
-	
-	@Valid
 	private ClubDto clubDto;
 	
 	public String getId() {

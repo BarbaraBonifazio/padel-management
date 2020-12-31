@@ -55,8 +55,8 @@ public class CourtController {
 	}
 	
 	@GetMapping("/{courtId}")
-	public ResponseEntity<CourtDto> show(@PathVariable String courtId){
-		CourtDto courtDto = courtService.findCourtDtoById(Long.parseLong(courtId));
+	public ResponseEntity<CourtDto> show(@PathVariable String courtId) throws Exception {
+		CourtDto courtDto = courtService.findCourtDtoById(courtId);
 		 return ResponseEntity.status(HttpStatus.OK).body(courtDto);
 	}
 	

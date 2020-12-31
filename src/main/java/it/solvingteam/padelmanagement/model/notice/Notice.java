@@ -25,6 +25,16 @@ public class Notice {
 	@JoinColumn(name = "club_id", nullable = false)
 	private Club club;
 
+	public Notice() {
+	}
+	
+	public Notice(String message, LocalDate creationDate, Club club) {
+		super();
+		this.message = message;
+		this.creationDate = creationDate;
+		this.club = club;
+	}
+
 	public Long getId() {
 		return id;
 	}

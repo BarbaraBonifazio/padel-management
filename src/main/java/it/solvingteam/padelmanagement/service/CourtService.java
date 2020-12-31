@@ -42,11 +42,17 @@ public class CourtService {
 
 
 	public Court findById(Long id) {
-		return this.courtRepository.findById(id).get();
+		return this.courtRepository.findById(id).get();		
 	}
 	
-	public CourtDto findCourtDtoById(Long id) {
-		 Court entity = this.courtRepository.findById(id).get();
+	public CourtDto findCourtDtoById(String id) throws Exception {
+		 if(!StringUtils.isNumeric(id)) {
+	            throw new Exception("L'id fornito non esiste!");
+	        }
+		 Court entity = this.courtRepository.findById(Long.parseLong(id)).get();
+		 if(entity==null) {
+	            throw new Exception("L'id fornito non è valido!");
+	        }
 		 return courtMapper.convertEntityToDto(entity);
 	}
 
@@ -57,10 +63,7 @@ public class CourtService {
 	}
 
 
-	public CourtDto update(CourtDto courtDto) throws Exception {
-		if(!StringUtils.isNumeric(courtDto.getId())) {
-			throw new Exception("L'id fornito non esiste!");
-		}
+	public CourtDto update(CourtDto courtDto) {
 		Court courtEntity = courtMapper.convertDtoToEntity(courtDto);
 		Court courtDaDb = courtRepository.findById(courtEntity.getId()).get();
 		Club club = clubService.findById(courtDaDb.getClub().getId());
@@ -72,12 +75,12 @@ public class CourtService {
 
 	public SuccessMessageDto setStatus(String id) throws Exception {
 
-        if(id==null||!StringUtils.isNumeric(id)) {
-            throw new Exception("id non valido");
+        if(!StringUtils.isNumeric(id)) {
+            throw new Exception("L'id fornito non esiste!");
         }
         Court courtDaDb =courtRepository.findById(Long.parseLong(id)).get();
         if(courtDaDb==null) {
-            throw new Exception("id inesistente");
+            throw new Exception("L'id fornito non è valido!");
         }
 
         for(Game game : courtDaDb.getGames()) {

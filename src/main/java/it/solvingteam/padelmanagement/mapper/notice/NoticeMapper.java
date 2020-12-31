@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import it.solvingteam.padelmanagement.dto.NoticeDto;
 import it.solvingteam.padelmanagement.mapper.AbstractMapper;
 import it.solvingteam.padelmanagement.mapper.club.ClubMapper;
+import it.solvingteam.padelmanagement.mapper.club.FindClubMapper;
 import it.solvingteam.padelmanagement.model.notice.Notice;
 
 @Component
@@ -17,6 +18,8 @@ public class NoticeMapper extends AbstractMapper<Notice, NoticeDto> {
 
 	@Autowired
 	ClubMapper clubMapper;
+	@Autowired
+	FindClubMapper findClubMapper;
 
 	@Override
 	public NoticeDto convertEntityToDto(Notice entity) {
@@ -29,7 +32,7 @@ public class NoticeMapper extends AbstractMapper<Notice, NoticeDto> {
 		dto.setId(String.valueOf(entity.getId()));
 		dto.setMessage(entity.getMessage());
 		dto.setCreationDate(String.valueOf(entity.getCreationDate()));
-		dto.setClubDto(clubMapper.convertEntityToDto(entity.getClub()));
+		dto.setClubDto(findClubMapper.convertEntityToDto(entity.getClub()));
 
 		return dto;
 
@@ -49,7 +52,7 @@ public class NoticeMapper extends AbstractMapper<Notice, NoticeDto> {
 		
 		entity.setMessage(dto.getMessage());
 		entity.setCreationDate(LocalDate.parse(dto.getCreationDate()));
-		entity.setClub(clubMapper.convertDtoToEntity(dto.getClubDto()));
+		entity.setClub(findClubMapper.convertDtoToEntity(dto.getClubDto()));
 
 		return entity;
 	}

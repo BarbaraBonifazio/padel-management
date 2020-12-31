@@ -22,7 +22,6 @@ public class ExceptionAdvisor {
                 .body(new ErrorMessageDto(e.getBindingResult().getFieldErrors().stream()
                         .map(obj -> obj.getField() + ": " + obj.getDefaultMessage()).collect(Collectors.toList())));
     }
-	
     
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorMessageDto> handleException(Exception e){
