@@ -23,5 +23,11 @@ public class PlayerService {
 		player.setUser(user);
 		return playerRepository.save(player);
 	}
-
+	
+	public Player findPlayerWithClubEager(String playerId) {
+		return playerRepository.findPlayerClub(Long.parseLong(playerId));
+	}
+	
+	
+	
 }

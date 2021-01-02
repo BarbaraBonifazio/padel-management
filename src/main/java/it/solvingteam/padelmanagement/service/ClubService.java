@@ -35,4 +35,5 @@ public class ClubService {
 		return this.clubRepository.findByAdmin_Id(adminId);
 	}
 
+
 }

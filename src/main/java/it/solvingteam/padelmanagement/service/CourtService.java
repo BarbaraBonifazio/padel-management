@@ -101,5 +101,10 @@ public class CourtService {
 
     }
 
+
+	public List<Court> findAllCourtsByClub(Long clubId) {
+		return courtRepository.findAllCourtByClub_Id(clubId);
+	}
+
 	
 }

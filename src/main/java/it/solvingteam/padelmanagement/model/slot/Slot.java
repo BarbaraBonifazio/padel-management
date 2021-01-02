@@ -11,25 +11,25 @@ public class Slot {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
+	private Long id;
 	private Integer hour;
 	private Integer minute;
 	
 	@Enumerated(EnumType.STRING)
 	private SlotName slotName;
 	
-	public Slot(Integer id, Integer hour, Integer minute, SlotName slotName) {
+	public Slot(Long id, Integer hour, Integer minute, SlotName slotName) {
 		this.id=id;
 		this.hour=hour;
 		this.minute=minute;
 		this.slotName=slotName;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
