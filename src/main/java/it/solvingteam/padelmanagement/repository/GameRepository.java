@@ -11,7 +11,7 @@ import it.solvingteam.padelmanagement.model.game.Game;
 public interface GameRepository extends JpaRepository<Game, Long>{
 	
 	
-	@Query("From Game g join fetch g.gameCreator c where g.date =?1 and c.club.id =?2")
+	@Query("From Game g right join fetch g.gameCreator c where g.date =?1 and c.club.id =?2")
 	List<Game> listAllGamesBooked(LocalDate date, Long clubId);
 
 }

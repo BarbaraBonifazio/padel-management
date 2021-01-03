@@ -34,8 +34,6 @@ public class GameMapper extends AbstractMapper<Game, GameDto>{
 		dto.setMissingPlayers(String.valueOf(entity.getMissingPlayers()));
 		dto.setDate(String.valueOf(entity.getDate()));
 		dto.setCourtDto(courtMapper.convertEntityToDto(entity.getCourt()));
-		dto.setPlayerDto(playerMapper.convertEntityToDto(entity.getGameCreator()));
-		dto.setPlayersDto(playerMapper.convertEntityToDto(entity.getOtherPlayers()));
 		
 		return dto;
 

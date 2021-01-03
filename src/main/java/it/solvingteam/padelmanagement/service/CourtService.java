@@ -102,8 +102,9 @@ public class CourtService {
     }
 
 
-	public List<Court> findAllCourtsByClub(Long clubId) {
-		return courtRepository.findAllCourtByClub_Id(clubId);
+	public List<CourtDto> findAllCourtsByClub(Long clubId) {
+		List<CourtDto> courtsDto = courtMapper.convertEntityToDto(courtRepository.findAllCourtByClub_Id(clubId));
+		 return courtsDto;
 	}
 
 	

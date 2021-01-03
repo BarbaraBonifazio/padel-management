@@ -1,8 +1,6 @@
 package it.solvingteam.padelmanagement.validator;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
 
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -23,10 +21,10 @@ public class GameCheckValidator implements Validator{
 		GameCheckDto gameCheckDto = (GameCheckDto) target;
 
 			try {
-				if (new SimpleDateFormat("yyyy-MM-dd").parse(gameCheckDto.getDate()).before(new Date())) {
+				if (LocalDate.parse(gameCheckDto.getDate()).isBefore(LocalDate.now())) {
 					errors.rejectValue("date", "dateError", "Data non valida");
 				}
-			} catch (ParseException e) {
+			} catch (Exception e) {
 				errors.rejectValue("date", "dateError", "Data inserita non valida");
 			  }	
 			

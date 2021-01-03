@@ -18,6 +18,10 @@ public class Slot {
 	@Enumerated(EnumType.STRING)
 	private SlotName slotName;
 	
+	public Slot() {
+		
+	}
+	
 	public Slot(Long id, Integer hour, Integer minute, SlotName slotName) {
 		this.id=id;
 		this.hour=hour;

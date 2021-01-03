@@ -27,6 +27,10 @@ public class PlayerService {
 	public Player findPlayerWithClubEager(String playerId) {
 		return playerRepository.findPlayerClub(Long.parseLong(playerId));
 	}
+
+	public Player findById(Long playerId) {
+		return playerRepository.findById(playerId).get();
+	}
 	
 	
 	

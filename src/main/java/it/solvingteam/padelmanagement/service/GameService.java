@@ -11,9 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.solvingteam.padelmanagement.dto.CourtDto;
+import it.solvingteam.padelmanagement.dto.GameDto;
 import it.solvingteam.padelmanagement.dto.message.game.GameCheckDto;
 import it.solvingteam.padelmanagement.mapper.court.CourtMapper;
-import it.solvingteam.padelmanagement.model.court.Court;
+import it.solvingteam.padelmanagement.mapper.game.GameMapper;
 import it.solvingteam.padelmanagement.model.game.Game;
 import it.solvingteam.padelmanagement.model.player.Player;
 import it.solvingteam.padelmanagement.model.slot.Slot;
@@ -34,78 +35,143 @@ public class GameService {
 	CourtMapper courtMapper;
 	@Autowired
 	CourtService courtService;
+	@Autowired
+	GameMapper gameMapper;
 
 	public List<GameCheckDto> check(GameCheckDto gameCheckDto) {
 		Player gameCreator = playerService.findPlayerWithClubEager(gameCheckDto.getPlayerId());
-		List<Game> gamesBooked = gameRepository.listAllGamesBooked(LocalDate.parse(gameCheckDto.getDate()), gameCreator.getClub().getId());
-		Set<Court> courtsNotAvailable = new HashSet<>();
-		Set <CourtDto> allCourtsAvailable = new HashSet<>();
-		Set<Court> allCourtsDaDbList = courtService.findAllCourtsByClub(gameCreator.getClub().getId()).stream().collect(Collectors.toSet());
+		List<Game> gamesBooked = gameRepository.listAllGamesBooked(LocalDate.parse(gameCheckDto.getDate()),
+				gameCreator.getClub().getId());
+		Set<CourtDto> allCourtsNotAvailable = new HashSet<>();
+		Set<CourtDto> allCourtsAvailable = new HashSet<>();
+		Set<CourtDto> allCourtsDaDbList = courtService.findAllCourtsByClub(gameCreator.getClub().getId()).stream().collect(Collectors.toSet());
 		
-		if(gamesBooked.isEmpty()) {
-			for(Court courtDaDb : allCourtsDaDbList) {
-				if(courtDaDb.getIsInactive() == false) {
-					allCourtsAvailable.add(courtMapper.convertEntityToDto(courtDaDb)); 
+		//se non ci sono partite prenotate per data e fascia oraria (slot) in input, ritorna direttamente tutte le partite prenotabili saltando gli altri controlli
+		List<GameCheckDto> gamesBookableList = new ArrayList<>();
+		if (gamesBooked.isEmpty()) {
+			for (CourtDto courtDtoDaDb : allCourtsDaDbList) {
+				if (courtDtoDaDb.getIsInactive() == false) {
+					allCourtsAvailable.add(courtDtoDaDb);
+					
+				}
+			}	
+					for(CourtDto availableCourtDto : allCourtsAvailable) {
+						
+							GameCheckDto newGameCheckDto = new GameCheckDto();
+							
+							newGameCheckDto.setDate(gameCheckDto.getDate());
+							newGameCheckDto.setMissingPlayers(gameCheckDto.getMissingPlayers());
+							newGameCheckDto.setPlayerId(gameCheckDto.getPlayerId());
+							newGameCheckDto.setSlotsIds(gameCheckDto.getSlotsIds());
+							newGameCheckDto.setCourtDto(availableCourtDto);
+							
+							
+							List<GameCheckDto> newGameCheckDtoList = new ArrayList<>();
+							newGameCheckDtoList.add(newGameCheckDto);
+							for(GameCheckDto bookableGames :  newGameCheckDtoList) {
+								gamesBookableList.add(bookableGames);
+							}	
+					}
+			return gamesBookableList;
+		}
+		// ---- Fine ritorno di tutte le partite prenotabili ----
+		
+		//se ci sono partite prenotate, carica gli slot prenotati da DB
+		List<Slot> slotsDaDBList = new ArrayList<>();
+		for (String slotId : gameCheckDto.getSlotsIds()) {
+			Slot slotDaDB = slotService.findById(Long.parseLong(slotId));		
+			slotsDaDBList.add(slotDaDB);
+		}
+		
+		//trova campi non disponibili
+		Boolean found = false;
+		for (Game game : gamesBooked) {
+			CourtDto court = courtMapper.convertEntityToDto(game.getCourt());
+			for (Slot slotDaDb : slotsDaDBList) {
+				for (Slot slotBooked : game.getSlots()) {
+					found = slotBooked.equals(slotDaDb);
+					if (found) {
+						allCourtsNotAvailable.add(court);
+					}
+				}
+
+			}
+		}
+		
+		//trova campi disponibili per la prenotazione confrontando tutti i campi da DB con quelli non disponibili
+		Boolean available = false;
+		for(CourtDto courtDtoDaDb : allCourtsDaDbList) {
+			for(CourtDto courtNotAvailableDto : allCourtsNotAvailable) {
+				if(courtDtoDaDb.getId().equals(courtNotAvailableDto.getId()) && courtDtoDaDb.getIsInactive() == false) {
+					available = false;
+				} else {
+					available = true;
+				}
+			
+				if(available) {
+					allCourtsAvailable.add(courtDtoDaDb);
 				}
 			}
 		}
 		
-		Boolean trovato = false;
-		int i=0;
-		int j=0;
-			for (Game game : gamesBooked){
-			Court courtGame = game.getCourt();
-				for(String slotId : gameCheckDto.getSlotsIds()) {
-					Slot slotOccupied = slotService.findById(Long.parseLong(slotId));
-					List <Slot> slotsDaDb = new ArrayList<>();
-						slotsDaDb.add(slotOccupied);
-						
-						while (i < slotsDaDb.size()) {
-							Slot slotCheck = (Slot) slotsDaDb.get(i);
-							 
-							  while(j < gamesBooked.size()) {
-								 
-								Game gameBooked = (Game) gamesBooked.get(j);
-								List<Slot> slotsGameBooked = gameBooked.getSlots();
-								
-								for(Slot slotGame : slotsGameBooked) {
-								trovato = slotGame.equals(slotCheck);
-								
-									if(trovato) {
-										courtsNotAvailable.add(courtGame);
-										j++;
-										continue;
-										
-									}
-								}
-							  }
-						}
-							
-				} //chiusura for gameCheckDto.getSlotsIds()
-							
-								for(Court courtNotAvailable : courtsNotAvailable){
-									for(Court courtDaDb : allCourtsDaDbList) {
-										if(!courtNotAvailable.equals(courtDaDb) && courtDaDb.getIsInactive() == false){
-											allCourtsAvailable.add(courtMapper.convertEntityToDto(courtDaDb)); 
-										}
-									}
-								}
-				
-				} //chiusura for per i GamedBooked
-//						List<CourtDto> courtsList = allCourtsAvailable.stream().collect(Collectors.toList());
-//								return courtsList;
-					
-			List<GameCheckDto> gamesAvailable = new ArrayList<>();
-			for(CourtDto courtDto : allCourtsAvailable) {
-//				GameCheckDto newGameDto  = new GameCheckDto();
-//				newGameDto.setDate(gameCheckDto.getDate());
-//				newGameDto.setPlayerId(gameCheckDto.getPlayerId());
-//				newGameDto.setSlotsIds(gameCheckDto.getSlotsIds());
-				gameCheckDto.setCourtDto(courtDto);
-				gamesAvailable.add(gameCheckDto);
-			}
+		//ritorna la lista di partite prenotabili, impostando i campi prenotabili in base a data e slot		
+		for(CourtDto availableCourtDto : allCourtsAvailable) {
+			GameCheckDto newGameCheckDto = new GameCheckDto();
+			newGameCheckDto.setCourtDto(availableCourtDto);
+			newGameCheckDto.setDate(gameCheckDto.getDate());
+			newGameCheckDto.setMissingPlayers(gameCheckDto.getMissingPlayers());
+			newGameCheckDto.setPlayerId(gameCheckDto.getPlayerId());
+			newGameCheckDto.setSlotsIds(gameCheckDto.getSlotsIds());
 			
-			return gamesAvailable;
+			List<GameCheckDto> newGameCheckDtoList = new ArrayList<>();
+			newGameCheckDtoList.add(newGameCheckDto);
+			for(GameCheckDto bookableGames :  newGameCheckDtoList) {
+				gamesBookableList.add(bookableGames);
+			}
+		}
+		
+		return gamesBookableList;
+	}
+
+
+	public GameDto insert(GameCheckDto gameCheckDto) throws Exception {
+		
+		//operazione di insert tradesafe
+		boolean gameBookable = false;
+		List<GameCheckDto> bookableGames = this.check(gameCheckDto); 
+		for(GameCheckDto bookableGame : bookableGames) {
+			if (gameCheckDto.getCourtDto().getId().equals(bookableGame.getCourtDto().getId())) {
+				gameBookable = true;
+				break;
+			} else {
+				gameBookable = false;
+			}
+		}
+		
+			//se la partita risulta ancora prenotabile, si procede
+			if (gameBookable) {
+				Player player = playerService.findById(Long.parseLong(gameCheckDto.getPlayerId()));
+				List<Slot> slotBooked = new ArrayList<>();
+				for (String slot : gameCheckDto.getSlotsIds()) {
+					Slot slotDaDb = slotService.findById(Long.parseLong(slot));
+					slotBooked.add(slotDaDb);
+				} 
+				
+				Game game = new Game();
+				game.setPaid(Boolean.FALSE);
+				game.setMissingPlayers(Integer.parseInt(gameCheckDto.getMissingPlayers()));
+				game.setDate(LocalDate.parse(gameCheckDto.getDate()));
+				game.setCourt(courtMapper.convertDtoToEntity(gameCheckDto.getCourtDto()));
+				game.setGameCreator(player);
+				game.setSlots(slotBooked);
+	
+				Game gameDaDb = gameRepository.save(game);
+				return gameMapper.convertEntityToDto(gameDaDb);
+				
+			} else {  //altrimenti ritorna un'eccezione
+				throw new Exception("Non ci sono campi disponibili per i criteri inseriti!");
+			}
+
 	}
 
 }

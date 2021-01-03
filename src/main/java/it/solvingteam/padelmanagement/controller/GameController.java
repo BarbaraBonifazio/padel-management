@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import it.solvingteam.padelmanagement.dto.GameDto;
 import it.solvingteam.padelmanagement.dto.message.game.GameCheckDto;
 import it.solvingteam.padelmanagement.exception.BindingResultException;
 import it.solvingteam.padelmanagement.service.GameService;
@@ -40,6 +41,14 @@ public class GameController {
 		
 		List<GameCheckDto> gamesCheckDto = gameService.check(gameCheckDto);
 		return ResponseEntity.status(HttpStatus.OK).body(gamesCheckDto);
+	}
+	
+	@PostMapping("/insert")
+	public ResponseEntity<GameDto> insert(@Valid @RequestBody GameCheckDto gameCheckDto, 
+			BindingResult bindingResult) throws Exception {
+		
+		GameDto gameDto = gameService.insert(gameCheckDto);
+		return ResponseEntity.status(HttpStatus.OK).body(gameDto);
 	}
 	
 }

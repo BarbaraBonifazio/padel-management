@@ -14,6 +14,7 @@ public class GameCheckDto {
 	@NotNull
 	private String playerId;
 	private CourtDto courtDto;
+	private String missingPlayers;
 	
 	public String getDate() {
 		return date;
@@ -38,6 +39,12 @@ public class GameCheckDto {
 	}
 	public void setCourtDto(CourtDto courtDto) {
 		this.courtDto = courtDto;
+	}
+	public String getMissingPlayers() {
+		return missingPlayers;
+	}
+	public void setMissingPlayers(String missingPlayers) {
+		this.missingPlayers = missingPlayers;
 	}
 	
 }
