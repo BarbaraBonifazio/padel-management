@@ -2,12 +2,14 @@ package it.solvingteam.padelmanagement.dto.message.game;
 
 import java.util.List;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import it.solvingteam.padelmanagement.dto.CourtDto;
 
 public class GameCheckDto {
-
+	
+	@NotBlank
 	private String date;
 	@NotNull
 	private List<String> slotsIds;

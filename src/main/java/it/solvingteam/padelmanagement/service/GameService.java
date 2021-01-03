@@ -15,6 +15,7 @@ import it.solvingteam.padelmanagement.dto.CourtDto;
 import it.solvingteam.padelmanagement.dto.GameDto;
 import it.solvingteam.padelmanagement.dto.message.SuccessMessageDto;
 import it.solvingteam.padelmanagement.dto.message.game.GameCheckDto;
+import it.solvingteam.padelmanagement.dto.message.game.GameUpdateDto;
 import it.solvingteam.padelmanagement.mapper.court.CourtMapper;
 import it.solvingteam.padelmanagement.mapper.game.GameMapper;
 import it.solvingteam.padelmanagement.model.game.Game;
@@ -230,12 +231,17 @@ public class GameService {
 		if(game.getDate().equals(LocalDate.now()) 
 				&& LocalTime.of(game.getSlots().iterator().next().getHour(), game.getSlots().iterator().next().getMinute()).isBefore(
 						LocalTime.now().plusMinutes(30))) {
-			throw new Exception("Non è possibile eliminare una partita a meno di trenta minuti dall'orario scelto!");
+			throw new Exception("Non è possibile manipolare una partita terminata o che sta per iniziare!");
 		} else 
 		gameRepository.delete(game);
 		SuccessMessageDto successMsg = new SuccessMessageDto("La partita è stata correttamente eliminata");
 		return successMsg;
 		
+	}
+
+	public List<GameCheckDto> update(GameUpdateDto gameUpdateDto) throws Exception {
+		this.delete(gameUpdateDto.getGameId());
+		return this.check(gameUpdateDto.getGameCheckDto());
 	}
 
 }
