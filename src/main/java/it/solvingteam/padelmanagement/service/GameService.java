@@ -213,4 +213,9 @@ public class GameService {
 
 	}
 
+	public List<GameDto> findAll(String playerId) {
+		List<Game> games = gameRepository.findAllGameByGameCreator_Id(Long.parseLong(playerId));
+		return gameMapper.convertEntityToDto(games);
+	}
+
 }
