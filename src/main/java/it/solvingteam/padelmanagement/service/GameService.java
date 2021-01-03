@@ -1,6 +1,7 @@
 package it.solvingteam.padelmanagement.service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import it.solvingteam.padelmanagement.dto.CourtDto;
 import it.solvingteam.padelmanagement.dto.GameDto;
+import it.solvingteam.padelmanagement.dto.message.SuccessMessageDto;
 import it.solvingteam.padelmanagement.dto.message.game.GameCheckDto;
 import it.solvingteam.padelmanagement.mapper.court.CourtMapper;
 import it.solvingteam.padelmanagement.mapper.game.GameMapper;
@@ -216,6 +218,24 @@ public class GameService {
 	public List<GameDto> findAll(String playerId) {
 		List<Game> games = gameRepository.findAllGameByGameCreator_Id(Long.parseLong(playerId));
 		return gameMapper.convertEntityToDto(games);
+	}
+
+
+	public SuccessMessageDto delete(String gameId) throws Exception {
+		Game game = this.gameRepository.findById(Long.parseLong(gameId)).get();
+		if(game.getDate().isBefore(LocalDate.now())) {
+			throw new Exception("Non è possibile eliminare una partita terminata!");
+		}
+		
+		if(game.getDate().equals(LocalDate.now()) 
+				&& LocalTime.of(game.getSlots().iterator().next().getHour(), game.getSlots().iterator().next().getMinute()).isBefore(
+						LocalTime.now().plusMinutes(30))) {
+			throw new Exception("Non è possibile eliminare una partita a meno di trenta minuti dall'orario scelto!");
+		} else 
+		gameRepository.delete(game);
+		SuccessMessageDto successMsg = new SuccessMessageDto("La partita è stata correttamente eliminata");
+		return successMsg;
+		
 	}
 
 }
