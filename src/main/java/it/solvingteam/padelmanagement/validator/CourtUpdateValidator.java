@@ -1,6 +1,9 @@
 package it.solvingteam.padelmanagement.validator;
 
+import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -38,8 +41,11 @@ public class CourtUpdateValidator implements Validator {
 			}
 		}
 		for(Game game : courtDaDb.getGames()) {
-			if(game.getDate().isAfter(LocalDate.now())) {
+			if(game.getDate().isAfter(LocalDate.now().minusDays(1)) 
+						&& LocalTime.of(game.getSlots().iterator().next().getHour(), game.getSlots().iterator().next().getMinute()).isBefore(
+								LocalTime.now().plusMinutes(30))) {
 				errors.rejectValue("gamesDto", "gamesOpenExists", "Non puoi modificare un Campo attualmente prenotato!");
+				break;
 			}
 		}
 	}
