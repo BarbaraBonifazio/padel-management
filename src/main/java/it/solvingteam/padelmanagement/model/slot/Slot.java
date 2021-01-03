@@ -203,6 +203,6 @@ public class Slot {
 	
 	@Override
 	public String toString() {
-		return " " + slotName.toString();
+		return " " + hour +":"+minute;
 	}
 }

@@ -107,14 +107,14 @@ public class Game {
 	public void setSlots(List<Slot> slots) {
 		this.slots = slots;
 	}
-
+	
 	@Override
 	public String toString() {
 		return " Nome Campo = " + " " + court.getName() + 
 				" \n " +
 				" Data: " + date + 
 				" \n " +
-				" Orario partita: " + slots.toString() + 
+				" Orario partita: " + slots.iterator().next().toString() + " - " +  slots.get(slots.size()-1).toString() +
 				" \n " +
 				" Giocatori mancanti: " + missingPlayers +
 				" \n " + " \n " +
@@ -122,7 +122,7 @@ public class Game {
 					" \n " + " \n " +
 					"Nome: " + gameCreator.getUser().getName() + 
 					" \n " +
-					"Cognome: " + gameCreator.getUser().getName() + 
+					"Cognome: " + gameCreator.getUser().getSurname() + 
 					" \n " +
 					"Username: " + gameCreator.getUser().getUsername() + 
 					" \n " +
