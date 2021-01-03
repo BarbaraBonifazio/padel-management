@@ -10,5 +10,7 @@ public interface CourtRepository extends JpaRepository<Court, Long>{
 
 	List<Court> findAllCourtByClub_Id(Long id);
 
+	Court findCourtByGames_Id(Long gamesBookedIds);
+
 
 }

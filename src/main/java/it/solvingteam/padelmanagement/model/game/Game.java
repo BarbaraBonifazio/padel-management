@@ -108,4 +108,26 @@ public class Game {
 		this.slots = slots;
 	}
 
+	@Override
+	public String toString() {
+		return " Nome Campo = " + " " + court.getName() + 
+				" \n " +
+				" Data: " + date + 
+				" \n " +
+				" Orario partita: " + slots.toString() + 
+				" \n " +
+				" Giocatori mancanti: " + missingPlayers +
+				" \n " + " \n " +
+				" Riepilogo dati personali creatore partita: " +
+					" \n " + " \n " +
+					"Nome: " + gameCreator.getUser().getName() + 
+					" \n " +
+					"Cognome: " + gameCreator.getUser().getName() + 
+					" \n " +
+					"Username: " + gameCreator.getUser().getUsername() + 
+					" \n " +
+					"Data di Nascita " + gameCreator.getUser().getDateOfBirth() +
+					" \n " + " \n " ;
+	}
+	
 }

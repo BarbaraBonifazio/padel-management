@@ -37,8 +37,10 @@ public class GameService {
 	CourtService courtService;
 	@Autowired
 	GameMapper gameMapper;
+	@Autowired
+	EmailService emailService;
 
-	public List<GameCheckDto> check(GameCheckDto gameCheckDto) {
+	public List<GameCheckDto> check(GameCheckDto gameCheckDto) throws Exception {
 		Player gameCreator = playerService.findPlayerWithClubEager(gameCheckDto.getPlayerId());
 		List<Game> gamesBooked = gameRepository.listAllGamesBooked(LocalDate.parse(gameCheckDto.getDate()),
 				gameCreator.getClub().getId());
@@ -47,7 +49,8 @@ public class GameService {
 		Set<CourtDto> allCourtsDaDbList = courtService.findAllCourtsByClub(gameCreator.getClub().getId()).stream().collect(Collectors.toSet());
 		
 		//se non ci sono partite prenotate per data e fascia oraria (slot) in input, ritorna direttamente tutte le partite prenotabili saltando gli altri controlli
-		List<GameCheckDto> gamesBookableList = new ArrayList<>();
+		Set<GameCheckDto> gamesBookableList = new HashSet<>();
+		
 		if (gamesBooked.isEmpty()) {
 			for (CourtDto courtDtoDaDb : allCourtsDaDbList) {
 				if (courtDtoDaDb.getIsInactive() == false) {
@@ -64,54 +67,78 @@ public class GameService {
 							newGameCheckDto.setPlayerId(gameCheckDto.getPlayerId());
 							newGameCheckDto.setSlotsIds(gameCheckDto.getSlotsIds());
 							newGameCheckDto.setCourtDto(availableCourtDto);
-							
-							
-							List<GameCheckDto> newGameCheckDtoList = new ArrayList<>();
-							newGameCheckDtoList.add(newGameCheckDto);
-							for(GameCheckDto bookableGames :  newGameCheckDtoList) {
-								gamesBookableList.add(bookableGames);
-							}	
+
+							gamesBookableList.add(newGameCheckDto);
+	
 					}
-			return gamesBookableList;
+			return gamesBookableList.stream().collect(Collectors.toList());
 		}
 		// ---- Fine ritorno di tutte le partite prenotabili ----
 		
+		
 		//se ci sono partite prenotate, carica gli slot prenotati da DB
 		List<Slot> slotsDaDBList = new ArrayList<>();
-		for (String slotId : gameCheckDto.getSlotsIds()) {
-			Slot slotDaDB = slotService.findById(Long.parseLong(slotId));		
-			slotsDaDBList.add(slotDaDB);
+		for (String slotIdBookingProposal : gameCheckDto.getSlotsIds()) {
+			Slot slotBookingPropposalDaDb = slotService.findById(Long.parseLong(slotIdBookingProposal));		
+			slotsDaDBList.add(slotBookingPropposalDaDb);
 		}
 		
-		//trova campi non disponibili
-		Boolean found = false;
+		//trova campi non disponibili in base agli slot passati in input
+		Boolean gamesBookedFound = false;
 		for (Game game : gamesBooked) {
-			CourtDto court = courtMapper.convertEntityToDto(game.getCourt());
-			for (Slot slotDaDb : slotsDaDBList) {
-				for (Slot slotBooked : game.getSlots()) {
-					found = slotBooked.equals(slotDaDb);
-					if (found) {
-						allCourtsNotAvailable.add(court);
+			CourtDto court = courtService.findCourtByGames_Id(game.getId());	
+			
+				for (Slot slotDaDb : slotsDaDBList) {
+					for (Slot slotBooked : game.getSlots()) {
+						gamesBookedFound = slotBooked.equals(slotDaDb);
+						
+						if (gamesBookedFound) {
+							allCourtsNotAvailable.add(court);
+							
+						} 
 					}
 				}
-
-			}
 		}
 		
-		//trova campi disponibili per la prenotazione confrontando tutti i campi da DB con quelli non disponibili
+		//se non trova slot corrispondenti a quelli passati in input, ritorna tutti i campi disponibili per quegli slot
+		if(allCourtsNotAvailable.isEmpty()) {  
+			for (CourtDto courtDtoDaDb : allCourtsDaDbList) {
+				if (courtDtoDaDb.getIsInactive() == false) {
+					allCourtsAvailable.add(courtDtoDaDb);
+					
+				}
+			}	
+			for(CourtDto availableCourtDto : allCourtsAvailable) {
+				
+				GameCheckDto newGameCheckDto = new GameCheckDto();
+				
+				newGameCheckDto.setDate(gameCheckDto.getDate());
+				newGameCheckDto.setMissingPlayers(gameCheckDto.getMissingPlayers());
+				newGameCheckDto.setPlayerId(gameCheckDto.getPlayerId());
+				newGameCheckDto.setSlotsIds(gameCheckDto.getSlotsIds());
+				newGameCheckDto.setCourtDto(availableCourtDto);
+
+				gamesBookableList.add(newGameCheckDto);
+
+			}
+			return gamesBookableList.stream().collect(Collectors.toList());
+		}
+		
+		//trova campi disponibili per la prenotazione confrontando tutti i campi da DB con quelli non disponibili poichè già prenotati 
 		Boolean available = false;
 		for(CourtDto courtDtoDaDb : allCourtsDaDbList) {
+			
 			for(CourtDto courtNotAvailableDto : allCourtsNotAvailable) {
-				if(courtDtoDaDb.getId().equals(courtNotAvailableDto.getId()) && courtDtoDaDb.getIsInactive() == false) {
+				if(courtDtoDaDb.getId().equals(courtNotAvailableDto.getId())) {
 					available = false;
+					break;
 				} else {
 					available = true;
 				}
-			
-				if(available) {
+			}
+				if(available && courtDtoDaDb.getIsInactive() == false) {
 					allCourtsAvailable.add(courtDtoDaDb);
 				}
-			}
 		}
 		
 		//ritorna la lista di partite prenotabili, impostando i campi prenotabili in base a data e slot		
@@ -123,20 +150,16 @@ public class GameService {
 			newGameCheckDto.setPlayerId(gameCheckDto.getPlayerId());
 			newGameCheckDto.setSlotsIds(gameCheckDto.getSlotsIds());
 			
-			List<GameCheckDto> newGameCheckDtoList = new ArrayList<>();
-			newGameCheckDtoList.add(newGameCheckDto);
-			for(GameCheckDto bookableGames :  newGameCheckDtoList) {
-				gamesBookableList.add(bookableGames);
+				gamesBookableList.add(newGameCheckDto);
 			}
-		}
 		
-		return gamesBookableList;
+		return gamesBookableList.stream().collect(Collectors.toList());
 	}
 
 
 	public GameDto insert(GameCheckDto gameCheckDto) throws Exception {
 		
-		//operazione di insert tradesafe
+		//operazione di insert tradesafe, controllo se la partita richiesta è ancora prenotabile
 		boolean gameBookable = false;
 		List<GameCheckDto> bookableGames = this.check(gameCheckDto); 
 		for(GameCheckDto bookableGame : bookableGames) {
@@ -166,10 +189,26 @@ public class GameService {
 				game.setSlots(slotBooked);
 	
 				Game gameDaDb = gameRepository.save(game);
+				
+				
+				if(gameDaDb.getMissingPlayers() == 0) {
+					emailService.sendMail(player.getUser().getMailAddress(), " Partita Prenotata ", 
+							" Gentile Utente " + player.getUser().getName() + " " + player.getUser().getSurname() + ", " 
+							+ "\n" + "\n" +
+							"siamo lieti di comunicarle che la seguente partita risulta correttamente prenotata: " 
+							+ "\n" + "\n" + 
+							" " + gameDaDb.toString() + " "
+							+ "\n" + 
+							"Le auguriamo Buon Divertimento! " + 
+							"\n" + "\n" +
+							"Cordiali saluti, "
+							+ "\n" +
+							"- Team Padel Management");
+				}
 				return gameMapper.convertEntityToDto(gameDaDb);
 				
 			} else {  //altrimenti ritorna un'eccezione
-				throw new Exception("Non ci sono campi disponibili per i criteri inseriti!");
+				throw new Exception("Il campo scelto non è disponibile per l'orario richiesto!");
 			}
 
 	}

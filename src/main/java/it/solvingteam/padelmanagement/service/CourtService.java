@@ -107,5 +107,11 @@ public class CourtService {
 		 return courtsDto;
 	}
 
+
+	public CourtDto findCourtByGames_Id(Long gamesBookedIds) {
+		Court entity = courtRepository.findCourtByGames_Id(gamesBookedIds);
+		return courtMapper.convertEntityToDto(entity);
+	}
+
 	
 }
