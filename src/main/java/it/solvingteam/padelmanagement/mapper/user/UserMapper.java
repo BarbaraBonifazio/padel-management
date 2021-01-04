@@ -106,26 +106,6 @@ public class UserMapper extends AbstractMapper<User, UserDto>{
 		return user;
 	}
 
-	public UserDto convertEntityToDtoForShow(User entity) {
-		if(entity == null) {
-			return null;
-		}
-		
-		UserDto dto = new UserDto();
-		
-		dto.setId(String.valueOf(entity.getId()));
-		dto.setName(entity.getName());
-		dto.setSurname(entity.getSurname());
-		dto.setMailAddress(entity.getMailAddress());
-		dto.setMobile(entity.getMobile());
-		dto.setDateOfBirth(String.valueOf(entity.getDateOfBirth()));
-		dto.setUsername(entity.getUsername());
-		dto.setRole(String.valueOf(entity.getRole()));
-		dto.setProfilePic(entity.getProfilePic());
-
-		return dto;
-	}
-
 	public User convertDtoUpdateToEntity(UpdateUserDto dto) {
 		if(dto == null) {
 			return null;
@@ -145,27 +125,6 @@ public class UserMapper extends AbstractMapper<User, UserDto>{
 		
 		return user;
 	}
-
-//	public UpdateUserDto convertEntityToDtoUpdate(User entity) {
-//		if(entity == null) {
-//			return null;
-//		}
-//		
-//		UpdateUserDto dto = new UpdateUserDto();
-//		dto.setId(String.valueOf(entity.getId()));
-//		dto.setName(entity.getName());
-//		dto.setSurname(entity.getSurname());
-//		dto.setMailAddress(entity.getMailAddress());
-//		dto.setMobile(entity.getMobile());
-//		dto.setDateOfBirth(String.valueOf(entity.getDateOfBirth()));
-//		dto.setUsername(entity.getUsername());
-//		dto.setProfilePic(entity.getProfilePic());
-//
-//		return dto;
-//	}
-
-	
-	
 	
 
 }

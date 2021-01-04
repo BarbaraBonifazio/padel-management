@@ -64,7 +64,7 @@ public class UserService {
 		 if(!StringUtils.isNumeric(userId)) {
 	            throw new Exception("L'id fornito non esiste!");
 	        }
-		return userMapper.convertEntityToDtoForShow(this.findById(Long.parseLong(userId)));
+		return userMapper.convertEntityToDto(this.findById(Long.parseLong(userId)));
 	}
 
 
