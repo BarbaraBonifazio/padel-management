@@ -16,11 +16,13 @@ import it.solvingteam.padelmanagement.dto.GameDto;
 import it.solvingteam.padelmanagement.dto.message.SuccessMessageDto;
 import it.solvingteam.padelmanagement.dto.message.game.GameCheckDto;
 import it.solvingteam.padelmanagement.dto.message.game.GameUpdateDto;
+import it.solvingteam.padelmanagement.dto.message.game.GameUpdateMissingPlayersDto;
 import it.solvingteam.padelmanagement.mapper.court.CourtMapper;
 import it.solvingteam.padelmanagement.mapper.game.GameMapper;
 import it.solvingteam.padelmanagement.model.game.Game;
 import it.solvingteam.padelmanagement.model.player.Player;
 import it.solvingteam.padelmanagement.model.slot.Slot;
+import it.solvingteam.padelmanagement.model.user.User;
 import it.solvingteam.padelmanagement.repository.GameRepository;
 
 @Service
@@ -242,6 +244,56 @@ public class GameService {
 	public List<GameCheckDto> update(GameUpdateDto gameUpdateDto) throws Exception {
 		this.delete(gameUpdateDto.getGameId());
 		return this.check(gameUpdateDto.getGameCheckDto());
+	}
+
+
+	public GameDto updateMissingPlayers(GameUpdateMissingPlayersDto gameUpdateMissingPlayersDto) throws Exception {
+		Game gameDaDb = gameRepository.findById(Long.parseLong(gameUpdateMissingPlayersDto.getGameId())).get();
+		Integer maxPlayers = 3;
+		Integer otherPlayers = gameDaDb.getOtherPlayers().size();
+		Integer missingPlayers = Integer.parseInt(gameUpdateMissingPlayersDto.getMissingPlayers());
+		maxPlayers = maxPlayers - otherPlayers;
+		if(missingPlayers <= maxPlayers) {
+			gameDaDb.setMissingPlayers(missingPlayers);
+			gameDaDb = gameRepository.save(gameDaDb);
+		}
+			if(gameDaDb.getMissingPlayers() == 0) {
+			
+				User user = gameDaDb.getGameCreator().getUser();
+				//mail conferma partita prenotata al creatore della partita:
+				emailService.sendMail(user.getMailAddress(), " Partita Prenotata ", 
+						" Gentile Utente " + user.getName() + " " + user.getSurname() + ", " 
+						+ "\n" + "\n" +
+						"siamo lieti di comunicarle che la seguente partita risulta correttamente prenotata: " 
+						+ "\n" + "\n" + 
+						" " + gameDaDb.toString() + " "
+						+ "\n" + 
+						"Le auguriamo Buon Divertimento! " + 
+						"\n" + "\n" +
+						"Cordiali saluti, "
+						+ "\n" +
+						"- Team Padel Management");
+				for(Player gamePlayer : gameDaDb.getOtherPlayers()) {
+					User otherPlayer = gamePlayer.getUser();
+				//mail conferma partita prenotata agli altri giocatori iscritti al circolo che fanno parte della partita:
+				emailService.sendMail(otherPlayer.getMailAddress(), " Partita Prenotata ", 
+						" Gentile Utente " + otherPlayer.getName() + " " + otherPlayer.getSurname() + ", " 
+						+ "\n" + "\n" +
+						"siamo lieti di comunicarle che la seguente partita risulta correttamente prenotata: " 
+						+ "\n" + "\n" + 
+						" " + gameDaDb.toString() + " "
+						+ "\n" + 
+						"Le auguriamo Buon Divertimento! " + 
+						"\n" + "\n" +
+						"Cordiali saluti, "
+						+ "\n" +
+						"- Team Padel Management");
+				}
+			} else {
+				throw new Exception("Numero giocatori mancanti : " + " " + maxPlayers);
+			}
+		
+			return gameMapper.convertEntityToDto(gameDaDb);
 	}
 
 }

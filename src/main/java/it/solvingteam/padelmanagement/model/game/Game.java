@@ -1,6 +1,7 @@
 package it.solvingteam.padelmanagement.model.game;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,7 +115,7 @@ public class Game {
 				" \n " +
 				" Data: " + date + 
 				" \n " +
-				" Orario partita: " + slots.iterator().next().toString() + " - " +  slots.get(slots.size()-1).toString() +
+				" Orario partita: " + slots.iterator().next().toString() + " - " + slots.get(slots.size()-1).getHour() + ":"+ (slots.get(slots.size()-1).getMinute() + 30) +
 				" \n " +
 				" Giocatori mancanti: " + missingPlayers +
 				" \n " + " \n " +

@@ -21,6 +21,7 @@ import it.solvingteam.padelmanagement.dto.GameDto;
 import it.solvingteam.padelmanagement.dto.message.SuccessMessageDto;
 import it.solvingteam.padelmanagement.dto.message.game.GameCheckDto;
 import it.solvingteam.padelmanagement.dto.message.game.GameUpdateDto;
+import it.solvingteam.padelmanagement.dto.message.game.GameUpdateMissingPlayersDto;
 import it.solvingteam.padelmanagement.exception.BindingResultException;
 import it.solvingteam.padelmanagement.service.GameService;
 import it.solvingteam.padelmanagement.validator.GameCheckValidator;
@@ -78,6 +79,17 @@ public class GameController {
 	@DeleteMapping("/{gameId}")
 	public ResponseEntity<SuccessMessageDto> delete(@PathVariable String gameId) throws Exception {
 		return ResponseEntity.status(HttpStatus.OK).body(gameService.delete(gameId));
+	}
+	
+	@PutMapping("/updateMissingPlayers")
+	public ResponseEntity <GameDto> updateMissingPlayers(@Valid @RequestBody GameUpdateMissingPlayersDto gameUpdateMissingPlayersDto, 
+			BindingResult bindingResult) throws Exception {
+
+		if(bindingResult.hasErrors()) {
+			throw new BindingResultException(bindingResult);
+		}		
+		GameDto gameDto = gameService.updateMissingPlayers(gameUpdateMissingPlayersDto);
+		return ResponseEntity.status(HttpStatus.OK).body(gameDto);
 	}
 	
 }
