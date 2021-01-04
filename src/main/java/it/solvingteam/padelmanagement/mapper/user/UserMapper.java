@@ -37,7 +37,6 @@ public class UserMapper extends AbstractMapper<User, UserDto>{
 		dto.setMobile(entity.getMobile());
 		dto.setDateOfBirth(String.valueOf(entity.getDateOfBirth()));
 		dto.setUsername(entity.getUsername());
-		dto.setPassword(entity.getPassword());
 		dto.setRole(String.valueOf(entity.getRole()));
 		dto.setProfilePic(entity.getProfilePic());
 
@@ -82,7 +81,6 @@ public class UserMapper extends AbstractMapper<User, UserDto>{
 		user.setMobile(dto.getMobile());
 		user.setDateOfBirth(LocalDate.parse(dto.getDateOfBirth()));
 		user.setUsername(dto.getUsername());
-		user.setPassword(dto.getPassword());
 		user.setRole(Enum.valueOf(Role.class, dto.getRole()));
 		user.setProfilePic(dto.getProfilePic());
 		
@@ -142,29 +140,29 @@ public class UserMapper extends AbstractMapper<User, UserDto>{
 		user.setDateOfBirth(LocalDate.parse(dto.getDateOfBirth()));
 		user.setUsername(dto.getUsername());
 		user.setPassword(dto.getPassword());
+		user.setRole(Enum.valueOf(Role.class, dto.getRole()));
 		user.setProfilePic(dto.getProfilePic());
 		
 		return user;
 	}
 
-	public UpdateUserDto convertEntityToDtoUpdate(User entity) {
-		if(entity == null) {
-			return null;
-		}
-		
-		UpdateUserDto dto = new UpdateUserDto();
-		dto.setId(String.valueOf(entity.getId()));
-		dto.setName(entity.getName());
-		dto.setSurname(entity.getSurname());
-		dto.setMailAddress(entity.getMailAddress());
-		dto.setMobile(entity.getMobile());
-		dto.setDateOfBirth(String.valueOf(entity.getDateOfBirth()));
-		dto.setUsername(entity.getUsername());
-		dto.setPassword(entity.getPassword());
-		dto.setProfilePic(entity.getProfilePic());
-
-		return dto;
-	}
+//	public UpdateUserDto convertEntityToDtoUpdate(User entity) {
+//		if(entity == null) {
+//			return null;
+//		}
+//		
+//		UpdateUserDto dto = new UpdateUserDto();
+//		dto.setId(String.valueOf(entity.getId()));
+//		dto.setName(entity.getName());
+//		dto.setSurname(entity.getSurname());
+//		dto.setMailAddress(entity.getMailAddress());
+//		dto.setMobile(entity.getMobile());
+//		dto.setDateOfBirth(String.valueOf(entity.getDateOfBirth()));
+//		dto.setUsername(entity.getUsername());
+//		dto.setProfilePic(entity.getProfilePic());
+//
+//		return dto;
+//	}
 
 	
 	

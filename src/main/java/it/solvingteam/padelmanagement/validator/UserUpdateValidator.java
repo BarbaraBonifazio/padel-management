@@ -3,6 +3,7 @@ package it.solvingteam.padelmanagement.validator;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
@@ -34,11 +35,12 @@ public class UserUpdateValidator implements Validator {
 			errors.rejectValue("repeatePassword", "passwordsDoesntMatch", "Password doesn't match");
 		}
 
-		Optional<User> user = userService.findUserByUSername(updateUserDto.getUsername());
-		if (user.isPresent()) {
-			errors.rejectValue("username", "usernameAlreadyExists", "Username already exists");
+		Optional<User> userByUsername = userService.findUserByUSername(updateUserDto.getUsername());
+		if(userByUsername.isPresent()) {
+			if (Long.parseLong(updateUserDto.getId()) != userByUsername.get().getId()){
+				errors.rejectValue("username", "usernameAlreadyExists", "Username already exists");
+			}
 		}
-
 		if (!StringUtils.isBlank(updateUserDto.getDateOfBirth())) {
 			try {
 				if (new SimpleDateFormat("yyyy-MM-dd").parse(updateUserDto.getDateOfBirth()).after(new Date())) { //controllo su data futura

@@ -1,5 +1,6 @@
 package it.solvingteam.padelmanagement.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
@@ -67,10 +68,15 @@ public class UserService {
 	}
 
 
-	public UpdateUserDto update(UpdateUserDto updateUserDto) {
-		User user = userMapper.convertDtoUpdateToEntity(updateUserDto);
-		this.userRepository.save(user);
-        return userMapper.convertEntityToDtoUpdate(user);
+	public UserDto update(UpdateUserDto updateUserDto) {
+		User userEntity = userMapper.convertDtoUpdateToEntity(updateUserDto);
+		this.userRepository.save(userEntity);
+        return userMapper.convertEntityToDto(userEntity);
+	}
+
+
+	public List<User> findAll() {
+		return userRepository.findAll();
 	}
 
 }

@@ -2,6 +2,7 @@ package it.solvingteam.padelmanagement.dto.message.user;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -23,6 +24,8 @@ public class UpdateUserDto {
 	private String mailAddress;
 	@NotBlank
 	private String dateOfBirth;
+	@NotEmpty
+	private String role;
 	@NotBlank
 	@Size(message = "inserisci un numero con il prefisso", max = 13, min = 13)
 	private String mobile;
@@ -76,6 +79,12 @@ public class UpdateUserDto {
 	}
 	public void setDateOfBirth(String dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
+	}
+	public String getRole() {
+		return role;
+	}
+	public void setRole(String role) {
+		this.role = role;
 	}
 	public String getMobile() {
 		return mobile;

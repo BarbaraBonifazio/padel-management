@@ -47,7 +47,7 @@ public class UserController {
 	}
 	
 	@PostMapping("/login")
-	public ResponseEntity<UserDto> signupUser(@Valid @RequestBody LoginUserDto loginUserDto) throws Exception {
+	public ResponseEntity<UserDto> loginUser(@Valid @RequestBody LoginUserDto loginUserDto) throws Exception {
 	
 		UserDto userDto = userService.signIn(loginUserDto.getUsername(), loginUserDto.getPassword());
 	
@@ -61,15 +61,15 @@ public class UserController {
 	}
 	
 	@PutMapping("/")
-	public ResponseEntity<UpdateUserDto> update(@Valid @RequestBody UpdateUserDto updateUserDto, 
+	public ResponseEntity<UserDto> update(@Valid @RequestBody UpdateUserDto updateUserDto, 
 			BindingResult bindingResult) throws Exception {
 		
 		userUpdateValidator.validate(updateUserDto, bindingResult);
 		if(bindingResult.hasErrors()) {
 			throw new BindingResultException(bindingResult);
 		}
-		updateUserDto = userService.update(updateUserDto);
-		return ResponseEntity.status(HttpStatus.OK).body(updateUserDto);
+		UserDto userDto = userService.update(updateUserDto);
+		return ResponseEntity.status(HttpStatus.OK).body(userDto);
 	}
 	
 }
