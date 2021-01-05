@@ -13,8 +13,10 @@ import it.solvingteam.padelmanagement.dto.message.notice.InsertNoticeDto;
 import it.solvingteam.padelmanagement.mapper.notice.NoticeMapper;
 import it.solvingteam.padelmanagement.model.club.Club;
 import it.solvingteam.padelmanagement.model.notice.Notice;
+import it.solvingteam.padelmanagement.model.player.Player;
 import it.solvingteam.padelmanagement.repository.NoticeRepository;
 import it.solvingteam.padelmanagement.service.ClubService;
+import it.solvingteam.padelmanagement.service.PlayerService;
 
 @Service
 public class NoticeService {
@@ -25,6 +27,8 @@ public class NoticeService {
 	ClubService clubService;
 	@Autowired
 	NoticeMapper noticeMapper;
+	@Autowired
+	PlayerService playerService;
 	
 	public NoticeDto insert(InsertNoticeDto insertNoticeDto) {
 		Club club = clubService.findClubByAdmin(Long.parseLong(insertNoticeDto.getAdminId()));
@@ -48,7 +52,7 @@ public class NoticeService {
 		 return noticeMapper.convertEntityToDto(entity);
 	}
 
-	public List<NoticeDto> findAll(String adminId) {
+	public List<NoticeDto> findAllNoticesForAdmin(String adminId) {
 			Club club = clubService.findClubByAdmin(Long.parseLong(adminId));
 			List<Notice> notices = noticeRepository.findAllNoticeByClub_Id(club.getId());
 			return noticeMapper.convertEntityToDto(notices);
@@ -71,6 +75,12 @@ public class NoticeService {
         }
 		noticeRepository.delete(entity);
 		return new SuccessMessageDto("La notizia selezionata è stata eliminata correttamente!");
+	}
+
+	public List<NoticeDto> findAllNoticesForPlayers(String playerId) {
+		Player player = playerService.findPlayerWithClubEager(playerId);
+		List<Notice> notices = noticeRepository.findAllNoticeByClub_Id(player.getClub().getId());
+		return noticeMapper.convertEntityToDto(notices);
 	}
 	
 }

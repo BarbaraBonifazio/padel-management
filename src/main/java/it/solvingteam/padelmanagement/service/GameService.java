@@ -16,6 +16,7 @@ import it.solvingteam.padelmanagement.dto.CourtDto;
 import it.solvingteam.padelmanagement.dto.GameDto;
 import it.solvingteam.padelmanagement.dto.message.SuccessMessageDto;
 import it.solvingteam.padelmanagement.dto.message.game.GameCheckDto;
+import it.solvingteam.padelmanagement.dto.message.game.GameJoinDto;
 import it.solvingteam.padelmanagement.dto.message.game.GameUpdateDto;
 import it.solvingteam.padelmanagement.dto.message.game.GameUpdateMissingPlayersDto;
 import it.solvingteam.padelmanagement.mapper.court.CourtMapper;
@@ -303,9 +304,71 @@ public class GameService {
             throw new Exception("L'id fornito non esiste!");
         }
 		Long id = Long.parseLong(playerId);
+		Player playerDaDb = playerService.findById(id);
 		Integer missingPlayers = 0;
-		List<Game> openMatches = gameRepository.findAllGameByGameCreator_IdNotAndDateAfterAndMissingPlayersNot(id, LocalDate.now().minusDays(1), missingPlayers);
-		return gameMapper.convertEntityToDto(openMatches);
+		List<Game> openGames = gameRepository.findAllGameByGameCreator_IdNotAndDateAfterAndMissingPlayersNotAndGameCreator_Club_IdEquals(
+									id, LocalDate.now().minusDays(1), missingPlayers, playerDaDb.getClub().getId());
+		return gameMapper.convertEntityToDto(openGames);
+	}
+	
+	/* ---- COMMENTO QUERY CHE RESTITUISCE GLI OPENMATCHES ----
+	 * findAllGameByGameCreator_IdNot = tutte le partite aperte che non ha creato il giocatore che sta ricercando le partite a cui unirsi
+	 * AndDateAfter = a partire da da domani...... ma nel parametro passo LocalDate meno un giorno, cosicchè la data comprenda anche oggi
+	 * AndMissingPlayersNot = che abbia dei missingPlayers maggiori di 0...... valore assegnato alla variabile passata in parametro
+	 * AndGameCreator_Club_IdEquals = che appartengano al suo club */
+
+	public SuccessMessageDto joinCallForAction(GameJoinDto gameJoinDto) throws Exception {
+		Player playerDaDb = playerService.findById(Long.parseLong(gameJoinDto.getPlayerId()));
+		Game gameDaDb = this.gameRepository.findById(Long.parseLong(gameJoinDto.getGameId())).get();
+		if(gameDaDb.getMissingPlayers() > 0) {
+			gameDaDb.getOtherPlayers().add(playerDaDb);
+			Integer missingPlayers = gameDaDb.getMissingPlayers();
+			missingPlayers = missingPlayers - 1;
+			gameDaDb.setMissingPlayers(missingPlayers);
+			this.gameRepository.save(gameDaDb);
+
+			} else {
+				
+			throw new Exception("Mi dispiace ma la partia a cui cercavi di iscriverti è già stata completata!");
+			
+			}
+		
+		if(gameDaDb.getMissingPlayers() == 0) {
+			
+			User user = gameDaDb.getGameCreator().getUser();
+			//mail conferma partita prenotata al creatore della partita:
+			emailService.sendMail(user.getMailAddress(), " Partita Prenotata ", 
+					" Gentile Utente " + user.getName() + " " + user.getSurname() + ", " 
+					+ "\n" + "\n" +
+					"siamo lieti di comunicarle che la seguente partita risulta correttamente prenotata: " 
+					+ "\n" + "\n" + 
+					" " + gameDaDb.toString() + " "
+					+ "\n" + 
+					"Le auguriamo Buon Divertimento! " + 
+					"\n" + "\n" +
+					"Cordiali saluti, "
+					+ "\n" +
+					"- Team Padel Management");
+			for(Player gamePlayer : gameDaDb.getOtherPlayers()) {
+				User otherPlayer = gamePlayer.getUser();
+			//mail conferma partita prenotata agli altri giocatori iscritti al circolo che fanno parte della partita:
+			emailService.sendMail(otherPlayer.getMailAddress(), " Partita Prenotata ", 
+					" Gentile Utente " + otherPlayer.getName() + " " + otherPlayer.getSurname() + ", " 
+					+ "\n" + "\n" +
+					"siamo lieti di comunicarle che la seguente partita risulta correttamente prenotata: " 
+					+ "\n" + "\n" + 
+					" " + gameDaDb.toString() + " "
+					+ "\n" + 
+					"Le auguriamo Buon Divertimento! " + 
+					"\n" + "\n" +
+					"Cordiali saluti, "
+					+ "\n" +
+					"- Team Padel Management");
+			}
+		} 
+	
+		SuccessMessageDto message = new SuccessMessageDto("Sei stato inserito nella partita selezionata!");
+		return message;
 	}
 
 }

@@ -15,8 +15,8 @@ public interface GameRepository extends JpaRepository<Game, Long>{
 	List<Game> listAllGamesBooked(LocalDate date, Long clubId);
 
 	List<Game> findAllGameByGameCreator_Id(Long playerId);
-
-	List<Game> findAllGameByGameCreator_IdNotAndDateAfterAndMissingPlayersNot(Long id, LocalDate date,
-			Integer missingPlayers);
+	
+	List<Game> findAllGameByGameCreator_IdNotAndDateAfterAndMissingPlayersNotAndGameCreator_Club_IdEquals(Long id, LocalDate date,
+			Integer missingPlayers, Long clubId);
 
 }

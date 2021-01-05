@@ -41,20 +41,20 @@ public class NoticeController {
 		return ResponseEntity.status(HttpStatus.OK).body(noticeDto);
 	}
 	
-	@GetMapping("/listAll/{adminId}")
-	public ResponseEntity<List<NoticeDto>> findAll(@PathVariable String adminId){
-		List<NoticeDto> noticeDto = noticeService.findAll(adminId);
+	@GetMapping("/listAllNoticesForAdmin/{adminId}")
+	public ResponseEntity<List<NoticeDto>> dashboardAdminListAllNotices(@PathVariable String adminId){
+		List<NoticeDto> noticeDto = noticeService.findAllNoticesForAdmin(adminId);
 		 return ResponseEntity.status(HttpStatus.OK).body(noticeDto);
 	}
 	
 	@GetMapping("/{noticeId}")
-	public ResponseEntity<NoticeDto> show(@PathVariable String noticeId) throws Exception {
+	public ResponseEntity<NoticeDto> dashboardAdminShowNotice(@PathVariable String noticeId) throws Exception {
 		NoticeDto noticeDto = noticeService.findNoticeDtoById(noticeId);
 		 return ResponseEntity.status(HttpStatus.OK).body(noticeDto);
 	}
 	
 	@PutMapping("/")
-	public ResponseEntity<NoticeDto> update(@Valid @RequestBody NoticeDto noticeDto, 
+	public ResponseEntity<NoticeDto> dashboardAdminUpdateNotice(@Valid @RequestBody NoticeDto noticeDto, 
 			BindingResult bindingResult) throws Exception {
 		
 		if(bindingResult.hasErrors()) {
@@ -65,7 +65,13 @@ public class NoticeController {
 	}
 	
 	@DeleteMapping("/{noticeId}")
-	public ResponseEntity<SuccessMessageDto> delete(@PathVariable String noticeId) throws Exception {
+	public ResponseEntity<SuccessMessageDto> dashboardAdminDeleteNotice(@PathVariable String noticeId) throws Exception {
 		return ResponseEntity.status(HttpStatus.OK).body(noticeService.delete(noticeId));
+	}
+	
+	@GetMapping("/listAllNoticesForPlayer/{playerId}")
+	public ResponseEntity<List<NoticeDto>> dashboardPlayerListAllNotices(@PathVariable String playerId){
+		List<NoticeDto> noticeDto = noticeService.findAllNoticesForPlayers(playerId);
+		 return ResponseEntity.status(HttpStatus.OK).body(noticeDto);
 	}
 }
