@@ -92,4 +92,9 @@ public class GameController {
 		return ResponseEntity.status(HttpStatus.OK).body(gameDto);
 	}
 	
+	@GetMapping("showCallForActions/{playerId}")
+	public ResponseEntity<List<GameDto>> showCallForActions(@PathVariable String playerId) throws Exception {
+		return ResponseEntity.status(HttpStatus.OK).body(gameService.findOpenMatches(playerId));
+	}
+	
 }

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -294,6 +295,17 @@ public class GameService {
 			}
 		
 			return gameMapper.convertEntityToDto(gameDaDb);
+	}
+
+
+	public List<GameDto> findOpenMatches(String playerId) throws Exception {
+		if(!StringUtils.isNumeric(playerId)) {
+            throw new Exception("L'id fornito non esiste!");
+        }
+		Long id = Long.parseLong(playerId);
+		Integer missingPlayers = 0;
+		List<Game> openMatches = gameRepository.findAllGameByGameCreator_IdNotAndDateAfterAndMissingPlayersNot(id, LocalDate.now().minusDays(1), missingPlayers);
+		return gameMapper.convertEntityToDto(openMatches);
 	}
 
 }
