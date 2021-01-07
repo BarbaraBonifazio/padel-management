@@ -27,5 +27,9 @@ public class AdminService {
 	public Admin findById(Long id) {
 		return this.adminRepository.findById(id).get();
 	}
+
+	public Admin findByUsername(String username) {
+		return adminRepository.findAdminByUser_username(username);
+	}
 	
 }

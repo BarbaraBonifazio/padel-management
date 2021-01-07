@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +15,6 @@ import it.solvingteam.padelmanagement.dto.CourtDto;
 import it.solvingteam.padelmanagement.dto.GameDto;
 import it.solvingteam.padelmanagement.dto.message.SuccessMessageDto;
 import it.solvingteam.padelmanagement.dto.message.game.GameCheckDto;
-import it.solvingteam.padelmanagement.dto.message.game.GameJoinDto;
 import it.solvingteam.padelmanagement.dto.message.game.GameUpdateDto;
 import it.solvingteam.padelmanagement.dto.message.game.GameUpdateMissingPlayersDto;
 import it.solvingteam.padelmanagement.mapper.court.CourtMapper;
@@ -48,7 +46,7 @@ public class GameService {
 	EmailService emailService;
 
 	public List<GameCheckDto> check(GameCheckDto gameCheckDto) throws Exception {
-		Player gameCreator = playerService.findPlayerWithClubEager(gameCheckDto.getPlayerId());
+		Player gameCreator = playerService.findPlayerWithClubEager(Long.parseLong(gameCheckDto.getPlayerId()));
 		List<Game> gamesBooked = gameRepository.listAllGamesBooked(LocalDate.parse(gameCheckDto.getDate()),
 				gameCreator.getClub().getId());
 		Set<CourtDto> allCourtsNotAvailable = new HashSet<>();
@@ -220,8 +218,8 @@ public class GameService {
 
 	}
 
-	public List<GameDto> findAll(String playerId) {
-		List<Game> games = gameRepository.findAllGameByGameCreator_Id(Long.parseLong(playerId));
+	public List<GameDto> findAll(Long playerId) {
+		List<Game> games = gameRepository.findAllGameByGameCreator_Id(playerId);
 		return gameMapper.convertEntityToDto(games);
 	}
 
@@ -299,15 +297,11 @@ public class GameService {
 	}
 
 
-	public List<GameDto> findOpenMatches(String playerId) throws Exception {
-		if(!StringUtils.isNumeric(playerId)) {
-            throw new Exception("L'id fornito non esiste!");
-        }
-		Long id = Long.parseLong(playerId);
-		Player playerDaDb = playerService.findById(id);
+	public List<GameDto> findOpenMatches(Long playerId) throws Exception {
+		Player playerDaDb = playerService.findById(playerId);
 		Integer missingPlayers = 0;
 		List<Game> openGames = gameRepository.findAllGameByGameCreator_IdNotAndDateAfterAndMissingPlayersNotAndGameCreator_Club_IdEquals(
-									id, LocalDate.now().minusDays(1), missingPlayers, playerDaDb.getClub().getId());
+				playerId, LocalDate.now().minusDays(1), missingPlayers, playerDaDb.getClub().getId());
 		return gameMapper.convertEntityToDto(openGames);
 	}
 	
@@ -317,11 +311,10 @@ public class GameService {
 	 * AndMissingPlayersNot = che abbia dei missingPlayers maggiori di 0...... valore assegnato alla variabile passata in parametro
 	 * AndGameCreator_Club_IdEquals = che appartengano al suo club */
 
-	public SuccessMessageDto joinCallForAction(GameJoinDto gameJoinDto) throws Exception {
-		Player playerDaDb = playerService.findById(Long.parseLong(gameJoinDto.getPlayerId()));
-		Game gameDaDb = this.gameRepository.findById(Long.parseLong(gameJoinDto.getGameId())).get();
+	public SuccessMessageDto joinCallForAction(Player player, String gameId) throws Exception {
+		Game gameDaDb = this.gameRepository.findById(Long.parseLong(gameId)).get();
 		if(gameDaDb.getMissingPlayers() > 0) {
-			gameDaDb.getOtherPlayers().add(playerDaDb);
+			gameDaDb.getOtherPlayers().add(player);
 			Integer missingPlayers = gameDaDb.getMissingPlayers();
 			missingPlayers = missingPlayers - 1;
 			gameDaDb.setMissingPlayers(missingPlayers);

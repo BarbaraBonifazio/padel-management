@@ -52,8 +52,8 @@ public class NoticeService {
 		 return noticeMapper.convertEntityToDto(entity);
 	}
 
-	public List<NoticeDto> findAllNoticesForAdmin(String adminId) {
-			Club club = clubService.findClubByAdmin(Long.parseLong(adminId));
+	public List<NoticeDto> findAllNoticesForAdmin(Long adminId) {
+			Club club = clubService.findClubByAdmin(adminId);
 			List<Notice> notices = noticeRepository.findAllNoticeByClub_Id(club.getId());
 			return noticeMapper.convertEntityToDto(notices);
 		}
@@ -77,7 +77,7 @@ public class NoticeService {
 		return new SuccessMessageDto("La notizia selezionata è stata eliminata correttamente!");
 	}
 
-	public List<NoticeDto> findAllNoticesForPlayers(String playerId) {
+	public List<NoticeDto> findAllNoticesForPlayers(Long playerId) {
 		Player player = playerService.findPlayerWithClubEager(playerId);
 		List<Notice> notices = noticeRepository.findAllNoticeByClub_Id(player.getClub().getId());
 		return noticeMapper.convertEntityToDto(notices);

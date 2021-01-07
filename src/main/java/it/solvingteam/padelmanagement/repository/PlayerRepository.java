@@ -10,4 +10,6 @@ public interface PlayerRepository extends JpaRepository<Player, Long>{
 	
 	@Query("Select p From Player p JOIN FETCH p.club c where p.id = ?1")
 	Player findPlayerClub(Long playerId);
+
+	Player findPlayerByUser_username(String username);
 }

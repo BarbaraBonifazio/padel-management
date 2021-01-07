@@ -4,7 +4,7 @@ import javax.validation.constraints.NotBlank;
 
 public class GameJoinDto {
 
-	@NotBlank
+	
 	private String playerId;
 	@NotBlank
 	private String gameId;

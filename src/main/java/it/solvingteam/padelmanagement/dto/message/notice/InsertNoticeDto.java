@@ -6,7 +6,7 @@ public class InsertNoticeDto {
 
 	@NotBlank
 	private String message;
-	@NotBlank
+	
 	private String adminId;
 	
 	public String getMessage() {

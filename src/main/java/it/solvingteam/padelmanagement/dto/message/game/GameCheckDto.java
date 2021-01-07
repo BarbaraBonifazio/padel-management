@@ -13,7 +13,7 @@ public class GameCheckDto {
 	private String date;
 	@NotNull
 	private List<String> slotsIds;
-	@NotNull
+	
 	private String playerId;
 	private CourtDto courtDto;
 	private String missingPlayers;

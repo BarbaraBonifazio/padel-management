@@ -21,7 +21,10 @@ import it.solvingteam.padelmanagement.dto.CourtDto;
 import it.solvingteam.padelmanagement.dto.message.SuccessMessageDto;
 import it.solvingteam.padelmanagement.dto.message.court.InsertCourtDto;
 import it.solvingteam.padelmanagement.exception.BindingResultException;
+import it.solvingteam.padelmanagement.model.admin.Admin;
+import it.solvingteam.padelmanagement.service.AdminService;
 import it.solvingteam.padelmanagement.service.CourtService;
+import it.solvingteam.padelmanagement.util.TokenDecripter;
 import it.solvingteam.padelmanagement.validator.CourtUpdateValidator;
 import it.solvingteam.padelmanagement.validator.CourtValidator;
 
@@ -35,11 +38,15 @@ public class CourtController {
 	CourtValidator courtValidator;
 	@Autowired
 	CourtUpdateValidator courtUpdateValidator;
+	@Autowired
+	AdminService adminService;
 	
 	@PostMapping("/")
 	public ResponseEntity<CourtDto> insertCourt(@Valid @RequestBody InsertCourtDto insertCourtDto, 
 			BindingResult bindingResult) throws Exception {
-		
+		String username = TokenDecripter.decripter();
+		Admin admin = adminService.findByUsername(username); 
+		insertCourtDto.setAdminId(String.valueOf(admin.getId()));
 		courtValidator.validate(insertCourtDto, bindingResult);
 		if(bindingResult.hasErrors()) {
 			throw new BindingResultException(bindingResult);
@@ -48,9 +55,11 @@ public class CourtController {
 		return ResponseEntity.status(HttpStatus.OK).body(courtDto);
 	}
 	
-	@GetMapping("/listAll/{adminId}")
-	public ResponseEntity<List<CourtDto>> findAll(@PathVariable String adminId){
-		List<CourtDto> courtDto = courtService.findAll(adminId);
+	@GetMapping("/listAll")
+	public ResponseEntity<List<CourtDto>> findAll(){
+		String username = TokenDecripter.decripter();
+		Admin admin = adminService.findByUsername(username);
+		List<CourtDto> courtDto = courtService.findAll(admin.getId());
 		 return ResponseEntity.status(HttpStatus.OK).body(courtDto);
 	}
 	

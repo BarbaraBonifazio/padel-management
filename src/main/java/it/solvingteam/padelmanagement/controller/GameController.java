@@ -20,11 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 import it.solvingteam.padelmanagement.dto.GameDto;
 import it.solvingteam.padelmanagement.dto.message.SuccessMessageDto;
 import it.solvingteam.padelmanagement.dto.message.game.GameCheckDto;
-import it.solvingteam.padelmanagement.dto.message.game.GameJoinDto;
 import it.solvingteam.padelmanagement.dto.message.game.GameUpdateDto;
 import it.solvingteam.padelmanagement.dto.message.game.GameUpdateMissingPlayersDto;
 import it.solvingteam.padelmanagement.exception.BindingResultException;
+import it.solvingteam.padelmanagement.model.player.Player;
 import it.solvingteam.padelmanagement.service.GameService;
+import it.solvingteam.padelmanagement.service.PlayerService;
+import it.solvingteam.padelmanagement.util.TokenDecripter;
 import it.solvingteam.padelmanagement.validator.GameCheckValidator;
 
 @RestController
@@ -35,13 +37,17 @@ public class GameController {
 	private GameCheckValidator gameCheckValidator;
 	@Autowired
 	private GameService gameService;
+	@Autowired
+	PlayerService playerService;
 	
 	//metodo verificaDisponibilità gameCheck
 	
 	@PostMapping("/availabilityCheck")
 	public ResponseEntity<List<GameCheckDto>> gamesAvailability(@Valid @RequestBody GameCheckDto gameCheckDto, 
 			BindingResult bindingResult) throws Exception {
-		
+		String username = TokenDecripter.decripter();
+		Player player = playerService.findByUsername(username); 
+		gameCheckDto.setPlayerId(String.valueOf(player.getId()));
 		gameCheckValidator.validate(gameCheckDto, bindingResult);
 		if(bindingResult.hasErrors()) {
 			throw new BindingResultException(bindingResult);
@@ -54,14 +60,18 @@ public class GameController {
 	@PostMapping("/insert")
 	public ResponseEntity<GameDto> insert(@Valid @RequestBody GameCheckDto gameCheckDto, 
 			BindingResult bindingResult) throws Exception {
-		
+		String username = TokenDecripter.decripter();
+		Player player = playerService.findByUsername(username); 
+		gameCheckDto.setPlayerId(String.valueOf(player.getId()));
 		GameDto gameDto = gameService.insert(gameCheckDto);
 		return ResponseEntity.status(HttpStatus.OK).body(gameDto);
 	}
 
-	@GetMapping("/{playerId}")
-	public ResponseEntity<List<GameDto>> findAll(@PathVariable String playerId){
-		List<GameDto> gameDto = gameService.findAll(playerId);
+	@GetMapping("/")
+	public ResponseEntity<List<GameDto>> findAll(){
+		String username = TokenDecripter.decripter();
+		Player player = playerService.findByUsername(username); 
+		List<GameDto> gameDto = gameService.findAll(player.getId());
 		 return ResponseEntity.status(HttpStatus.OK).body(gameDto);
 	}
 	
@@ -93,14 +103,17 @@ public class GameController {
 		return ResponseEntity.status(HttpStatus.OK).body(gameDto);
 	}
 	
-	@GetMapping("showCallForActions/{playerId}")
-	public ResponseEntity<List<GameDto>> showCallForActions(@PathVariable String playerId) throws Exception {
-		return ResponseEntity.status(HttpStatus.OK).body(gameService.findOpenMatches(playerId));
+	@GetMapping("showCallForActions")
+	public ResponseEntity<List<GameDto>> showCallForActions() throws Exception {
+		String username = TokenDecripter.decripter();
+		Player player = playerService.findByUsername(username); 
+		return ResponseEntity.status(HttpStatus.OK).body(gameService.findOpenMatches(player.getId()));
 	}
 	
-	@PutMapping("/joinCallForAction")
-	public ResponseEntity<SuccessMessageDto> joinCallForAction(@Valid @RequestBody GameJoinDto gameJoinDto, 
-			BindingResult bindingResult) throws Exception {
-		return ResponseEntity.status(HttpStatus.OK).body(gameService.joinCallForAction(gameJoinDto));
+	@GetMapping("/joinCallForAction/{gameId}")
+	public ResponseEntity<SuccessMessageDto> joinCallForAction(@PathVariable String gameId) throws Exception {
+		String username = TokenDecripter.decripter();
+		Player player = playerService.findByUsername(username); 
+		return ResponseEntity.status(HttpStatus.OK).body(gameService.joinCallForAction(player, gameId));
 	}
 }

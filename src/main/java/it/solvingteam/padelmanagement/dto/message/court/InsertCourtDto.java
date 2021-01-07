@@ -9,7 +9,7 @@ public class InsertCourtDto {
 	private String name;
 	@NotNull
 	private Boolean isInactive;
-	@NotBlank
+	
 	private String adminId;
 	
 	public String getName() {

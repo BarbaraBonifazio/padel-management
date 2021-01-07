@@ -22,6 +22,11 @@ import it.solvingteam.padelmanagement.dto.NoticeDto;
 import it.solvingteam.padelmanagement.dto.message.SuccessMessageDto;
 import it.solvingteam.padelmanagement.dto.message.notice.InsertNoticeDto;
 import it.solvingteam.padelmanagement.exception.BindingResultException;
+import it.solvingteam.padelmanagement.model.admin.Admin;
+import it.solvingteam.padelmanagement.model.player.Player;
+import it.solvingteam.padelmanagement.service.AdminService;
+import it.solvingteam.padelmanagement.service.PlayerService;
+import it.solvingteam.padelmanagement.util.TokenDecripter;
 
 @RestController
 @RequestMapping("/api/dashboard")
@@ -29,11 +34,17 @@ public class NoticeController {
 
 	@Autowired
 	NoticeService noticeService;
+	@Autowired
+	AdminService adminService;
+	@Autowired
+	PlayerService playerService;
 	
 	@PostMapping("/")
 	public ResponseEntity<NoticeDto> insert(@Valid @RequestBody InsertNoticeDto insertNoticeDto, 
 					BindingResult bindingResult) throws Exception {
-		
+		String username = TokenDecripter.decripter();
+		Admin admin = adminService.findByUsername(username); 
+		insertNoticeDto.setAdminId(String.valueOf(admin.getId()));
 		if(bindingResult.hasErrors()) {
 			throw new BindingResultException(bindingResult);
 		}
@@ -41,9 +52,11 @@ public class NoticeController {
 		return ResponseEntity.status(HttpStatus.OK).body(noticeDto);
 	}
 	
-	@GetMapping("/listAllNoticesForAdmin/{adminId}")
-	public ResponseEntity<List<NoticeDto>> dashboardAdminListAllNotices(@PathVariable String adminId){
-		List<NoticeDto> noticeDto = noticeService.findAllNoticesForAdmin(adminId);
+	@GetMapping("/listAllNoticesForAdmin")
+	public ResponseEntity<List<NoticeDto>> dashboardAdminListAllNotices(){
+		String username = TokenDecripter.decripter();
+		Admin admin = adminService.findByUsername(username);
+		List<NoticeDto> noticeDto = noticeService.findAllNoticesForAdmin(admin.getId());
 		 return ResponseEntity.status(HttpStatus.OK).body(noticeDto);
 	}
 	
@@ -69,9 +82,11 @@ public class NoticeController {
 		return ResponseEntity.status(HttpStatus.OK).body(noticeService.delete(noticeId));
 	}
 	
-	@GetMapping("/listAllNoticesForPlayer/{playerId}")
-	public ResponseEntity<List<NoticeDto>> dashboardPlayerListAllNotices(@PathVariable String playerId){
-		List<NoticeDto> noticeDto = noticeService.findAllNoticesForPlayers(playerId);
+	@GetMapping("/listAllNoticesForPlayer")
+	public ResponseEntity<List<NoticeDto>> dashboardPlayerListAllNotices(){
+		String username = TokenDecripter.decripter();
+		Player player = playerService.findByUsername(username);
+		List<NoticeDto> noticeDto = noticeService.findAllNoticesForPlayers(player.getId());
 		 return ResponseEntity.status(HttpStatus.OK).body(noticeDto);
 	}
 }

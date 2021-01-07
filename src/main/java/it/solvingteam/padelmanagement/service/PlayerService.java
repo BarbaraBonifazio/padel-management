@@ -24,12 +24,16 @@ public class PlayerService {
 		return playerRepository.save(player);
 	}
 	
-	public Player findPlayerWithClubEager(String playerId) {
-		return playerRepository.findPlayerClub(Long.parseLong(playerId));
+	public Player findPlayerWithClubEager(Long playerId) {
+		return playerRepository.findPlayerClub(playerId);
 	}
 
 	public Player findById(Long playerId) {
 		return playerRepository.findById(playerId).get();
+	}
+
+	public Player findByUsername(String username) {
+		return playerRepository.findPlayerByUser_username(username);
 	}
 	
 	

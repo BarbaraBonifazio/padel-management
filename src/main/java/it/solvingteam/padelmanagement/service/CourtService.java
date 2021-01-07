@@ -56,8 +56,8 @@ public class CourtService {
 		 return courtMapper.convertEntityToDto(entity);
 	}
 
-	public List<CourtDto> findAll(String adminId) {
-		Club club = clubService.findClubByAdmin(Long.parseLong(adminId));
+	public List<CourtDto> findAll(Long adminId) {
+		Club club = clubService.findClubByAdmin(adminId);
 		List<Court> courts = courtRepository.findAllCourtByClub_Id(club.getId());
 		return courtMapper.convertEntityToDto(courts);
 	}

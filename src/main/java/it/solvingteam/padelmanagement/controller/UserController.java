@@ -34,17 +34,7 @@ public class UserController {
 	@Autowired
 	UserUpdateValidator userUpdateValidator;
 	
-	@PostMapping("/")
-	public ResponseEntity<InsertUserMessageDto> signupUser(@Valid @RequestBody InsertUserMessageDto insertUserMessageDto, 
-				BindingResult bindingResult) throws Exception {
-		
-		userSignupMessageValidator.validate(insertUserMessageDto, bindingResult);
-		if(bindingResult.hasErrors()) {
-			throw new BindingResultException(bindingResult);
-		}
-		insertUserMessageDto = userService.signup(insertUserMessageDto);
-		return ResponseEntity.status(HttpStatus.OK).body(insertUserMessageDto);
-	}
+	
 	
 	@PostMapping("/login")
 	public ResponseEntity<UserDto> loginUser(@Valid @RequestBody LoginUserDto loginUserDto) throws Exception {
