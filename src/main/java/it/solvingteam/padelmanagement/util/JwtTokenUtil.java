@@ -1,4 +1,4 @@
-package it.solvingteam.padelmanagement.configuration;
+package it.solvingteam.padelmanagement.util;
 
 import java.io.Serializable;
 import java.util.Date;

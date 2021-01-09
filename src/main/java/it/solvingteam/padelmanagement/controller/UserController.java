@@ -7,19 +7,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import it.solvingteam.padelmanagement.dto.UserDto;
-import it.solvingteam.padelmanagement.dto.message.user.InsertUserMessageDto;
-import it.solvingteam.padelmanagement.dto.message.user.LoginUserDto;
 import it.solvingteam.padelmanagement.dto.message.user.UpdateUserDto;
 import it.solvingteam.padelmanagement.exception.BindingResultException;
 import it.solvingteam.padelmanagement.service.UserService;
+import it.solvingteam.padelmanagement.util.TokenDecripter;
 import it.solvingteam.padelmanagement.validator.UserSignupMessageValidator;
 import it.solvingteam.padelmanagement.validator.UserUpdateValidator;
 
@@ -30,27 +27,16 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	@Autowired
-	UserSignupMessageValidator userSignupMessageValidator;
-	@Autowired
-	UserUpdateValidator userUpdateValidator;
+	private UserUpdateValidator userUpdateValidator;
 	
-	
-	
-	@PostMapping("/login")
-	public ResponseEntity<UserDto> loginUser(@Valid @RequestBody LoginUserDto loginUserDto) throws Exception {
-	
-		UserDto userDto = userService.signIn(loginUserDto.getUsername(), loginUserDto.getPassword());
-	
-	return ResponseEntity.status(HttpStatus.OK).body(userDto);
-	}
-	
-	@GetMapping("/{userId}")
-	public ResponseEntity<UserDto> show(@PathVariable String userId) throws Exception {
-		UserDto userDto = userService.findUserDtoById(userId);
+	@GetMapping("/showUserInfo")
+	public ResponseEntity<UserDto> show() throws Exception {
+		String username = TokenDecripter.decripter();
+		UserDto userDto = userService.findUserDtoByUsername(username);
 		 return ResponseEntity.status(HttpStatus.OK).body(userDto);
 	}
 	
-	@PutMapping("/")
+	@PutMapping("/updateUserInfo")
 	public ResponseEntity<UserDto> update(@Valid @RequestBody UpdateUserDto updateUserDto, 
 			BindingResult bindingResult) throws Exception {
 		

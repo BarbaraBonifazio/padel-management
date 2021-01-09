@@ -17,7 +17,7 @@ public class AdminService {
 	private UserService userService;
 	
 	public Admin insert(User user) {
-		user.setRole(Role.ROLE_ADMIN);
+		user.setRole(Role.ADMIN);
 		user = userService.updateUserRole(user);
 		Admin admin = new Admin();
 		admin.setUser(user);

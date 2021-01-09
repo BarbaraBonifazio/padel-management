@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import it.solvingteam.padelmanagement.NoticeService;
 import it.solvingteam.padelmanagement.dto.GameDto;
+import it.solvingteam.padelmanagement.dto.NoticeDto;
 import it.solvingteam.padelmanagement.dto.message.SuccessMessageDto;
 import it.solvingteam.padelmanagement.dto.message.game.GameCheckDto;
 import it.solvingteam.padelmanagement.dto.message.game.GameUpdateDto;
@@ -30,19 +32,22 @@ import it.solvingteam.padelmanagement.util.TokenDecripter;
 import it.solvingteam.padelmanagement.validator.GameCheckValidator;
 
 @RestController
-@RequestMapping("api/game")
-public class GameController {
-
+@RequestMapping("/api/player")
+public class PlayerController {
+	
+	@Autowired
+	private PlayerService playerService;
+	@Autowired
+	private NoticeService noticeService;
 	@Autowired
 	private GameCheckValidator gameCheckValidator;
 	@Autowired
 	private GameService gameService;
-	@Autowired
-	PlayerService playerService;
 	
-	//metodo verificaDisponibilità gameCheck
 	
-	@PostMapping("/availabilityCheck")
+	//ENDPOINTS GAMES (Player Creatore di Partite)
+	
+	@PostMapping("/availabilityGameCheck")
 	public ResponseEntity<List<GameCheckDto>> gamesAvailability(@Valid @RequestBody GameCheckDto gameCheckDto, 
 			BindingResult bindingResult) throws Exception {
 		String username = TokenDecripter.decripter();
@@ -57,7 +62,7 @@ public class GameController {
 		return ResponseEntity.status(HttpStatus.OK).body(gamesCheckDto);
 	}
 	
-	@PostMapping("/insert")
+	@PostMapping("/insertNewGame")
 	public ResponseEntity<GameDto> insert(@Valid @RequestBody GameCheckDto gameCheckDto, 
 			BindingResult bindingResult) throws Exception {
 		String username = TokenDecripter.decripter();
@@ -67,7 +72,7 @@ public class GameController {
 		return ResponseEntity.status(HttpStatus.OK).body(gameDto);
 	}
 
-	@GetMapping("/")
+	@GetMapping("/findAllCreatedGames")
 	public ResponseEntity<List<GameDto>> findAll(){
 		String username = TokenDecripter.decripter();
 		Player player = playerService.findByUsername(username); 
@@ -75,7 +80,7 @@ public class GameController {
 		 return ResponseEntity.status(HttpStatus.OK).body(gameDto);
 	}
 	
-	@PutMapping("/")
+	@PutMapping("/updateCreatedGame")
 	public ResponseEntity <List<GameCheckDto>> update(@Valid @RequestBody GameUpdateDto gameUpdateDto, 
 			BindingResult bindingResult) throws Exception {
 
@@ -87,12 +92,12 @@ public class GameController {
 	}
 	
 	
-	@DeleteMapping("/{gameId}")
+	@DeleteMapping("/deleteCreatedGame/{gameId}")
 	public ResponseEntity<SuccessMessageDto> delete(@PathVariable String gameId) throws Exception {
 		return ResponseEntity.status(HttpStatus.OK).body(gameService.delete(gameId));
 	}
 	
-	@PutMapping("/updateMissingPlayers")
+	@PutMapping("/updateMissingPlayersForGamesCreated")
 	public ResponseEntity <GameDto> updateMissingPlayers(@Valid @RequestBody GameUpdateMissingPlayersDto gameUpdateMissingPlayersDto, 
 			BindingResult bindingResult) throws Exception {
 
@@ -103,7 +108,12 @@ public class GameController {
 		return ResponseEntity.status(HttpStatus.OK).body(gameDto);
 	}
 	
-	@GetMapping("showCallForActions")
+//<--FINE ENDPOINTS GAMES -->
+	
+	
+	//ENDPOINTS CallForAction (Player Giocatore)
+	
+	@GetMapping("showCallForActionList")
 	public ResponseEntity<List<GameDto>> showCallForActions() throws Exception {
 		String username = TokenDecripter.decripter();
 		Player player = playerService.findByUsername(username); 
@@ -116,4 +126,21 @@ public class GameController {
 		Player player = playerService.findByUsername(username); 
 		return ResponseEntity.status(HttpStatus.OK).body(gameService.joinCallForAction(player, gameId));
 	}
+	
+//<--FINE ENDPOINTS CallForAction -->	
+	
+	
+	//ENDPOINT NOTICES DASHBOARD
+	
+	@GetMapping("/listAllNotices")
+	public ResponseEntity<List<NoticeDto>> dashboardPlayerListAllNotices(){
+		String username = TokenDecripter.decripter();
+		Player player = playerService.findByUsername(username);
+		List<NoticeDto> noticeDto = noticeService.findAllNoticesForPlayers(player.getId());
+		 return ResponseEntity.status(HttpStatus.OK).body(noticeDto);
+	}
+	
+//<--FINE ENDPOINTS NOTICES DASHBOARD -->
+	
+	
 }

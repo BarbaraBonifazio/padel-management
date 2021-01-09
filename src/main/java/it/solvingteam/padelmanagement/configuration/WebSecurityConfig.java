@@ -51,19 +51,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
-		// We don't need CSRF for this example
+		
 		httpSecurity.csrf().disable()
-				// dont authenticate this particular request
-				.authorizeRequests().antMatchers("/auth/**").permitAll().antMatchers(HttpMethod.OPTIONS, "/**")
-				.permitAll().
-				// all other requests need to be authenticated
+				//questa richiesta non verrà autenticata:
+				.authorizeRequests()
+				.antMatchers("/auth/**").permitAll()
+//				.antMatchers("/api/superAdmin/**").hasRole("SUPER_ADMIN")
+//				.antMatchers("/api/admin/**", "/api/user/**").hasRole("ADMIN")
+//				.antMatchers("/api/player/**", "/api/user/**").hasRole("PLAYER")
+//				.antMatchers("/api/guest/**").hasRole("GUEST")
+				.antMatchers(HttpMethod.OPTIONS, "/**").permitAll().
+				// tutte le altre richieste dovranno essere autenticate
 						anyRequest().authenticated().and().
-				// make sure we use stateless session; session won't be used to
-				// store user's state.
+				// assicurarsi di usare una sessione senza stato; 
+				// la sessione non sarà utilizzata per conservare lo stato dello user
 						exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-		// Add a filter to validate the tokens with every request
+		// Utilizzare un filtro per validare i token ad ogni richiesta
 		httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 }

@@ -18,7 +18,7 @@ public class PlayerService {
 
 	public Player insert(Player player) {
 		User user = userService.findById(player.getUser().getId());
-		user.setRole(Role.ROLE_PLAYER);
+		user.setRole(Role.PLAYER);
 		user = userService.updateUserRole(user);
 		player.setUser(user);
 		return playerRepository.save(player);

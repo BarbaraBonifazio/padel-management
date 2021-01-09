@@ -10,13 +10,17 @@ import org.springframework.validation.Validator;
 import it.solvingteam.padelmanagement.dto.message.joinProposal.InsertJoinProposalDto;
 import it.solvingteam.padelmanagement.model.ProposalStatus;
 import it.solvingteam.padelmanagement.model.joinProposal.JoinProposal;
+import it.solvingteam.padelmanagement.model.newClubProposal.NewClubProposal;
 import it.solvingteam.padelmanagement.service.JoinProposalService;
+import it.solvingteam.padelmanagement.service.NewClubProposalService;
 
 @Component
 public class JoinProposalValidator implements Validator{
 
 	@Autowired
 	JoinProposalService joinProposalService;
+	@Autowired
+	NewClubProposalService newClubProposalService;
 	
 	@Override
 	public boolean supports(Class<?> clazz) {
@@ -27,13 +31,21 @@ public class JoinProposalValidator implements Validator{
 	public void validate(Object target, Errors errors) {
 		InsertJoinProposalDto insertJoinProposalDto = (InsertJoinProposalDto) target;
 		
-		List<JoinProposal> proposals = joinProposalService.findProposalByAspiringAssociate(insertJoinProposalDto.getUserDto().getId());
-		for(JoinProposal joinProposal : proposals) {
+		List<JoinProposal> joinProposals = joinProposalService.findProposalByAspiringAssociate(insertJoinProposalDto.getUserDto().getId());
+		for(JoinProposal joinProposal : joinProposals) {
 			if(joinProposal.getProposalStatus() == ProposalStatus.PENDING) {
 				errors.rejectValue("proposalStatus", "proposalStatusPendingExists", "In attesa di approvazione della proposta effettuata");
 			}
 			if(joinProposal.getProposalStatus() == ProposalStatus.APPROVED) {
 				errors.rejectValue("proposalStatus", "proposalStatusApprovedExists", "Sei già membro di un Circolo!");
+			}
+		}
+		
+		List<NewClubProposal> newClubProposals = newClubProposalService.findProposalByUser(insertJoinProposalDto.getUserDto().getId());
+		for(NewClubProposal newClubProposal : newClubProposals) {
+			if(newClubProposal.getProposalStatus() == ProposalStatus.PENDING) {
+				errors.rejectValue("proposalStatus", "proposalStatusPendingExists", 
+							"Non puoi aderire ad un circolo esistente se hai fatto richiesta di creazione di un Nuovo Circolo!");
 			}
 		}
 	}

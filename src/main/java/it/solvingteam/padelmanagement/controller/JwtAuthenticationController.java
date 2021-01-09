@@ -20,12 +20,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import it.solvingteam.padelmanagement.configuration.JwtTokenUtil;
 import it.solvingteam.padelmanagement.dto.message.user.InsertUserMessageDto;
 import it.solvingteam.padelmanagement.exception.BindingResultException;
 import it.solvingteam.padelmanagement.model.JwtRequest;
 import it.solvingteam.padelmanagement.model.JwtResponse;
 import it.solvingteam.padelmanagement.service.JwtUserDetailsService;
+import it.solvingteam.padelmanagement.util.JwtTokenUtil;
 import it.solvingteam.padelmanagement.validator.UserSignupMessageValidator;
 
 @RestController

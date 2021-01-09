@@ -18,6 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import it.solvingteam.padelmanagement.service.JwtUserDetailsService;
+import it.solvingteam.padelmanagement.util.JwtTokenUtil;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
@@ -64,6 +65,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 						.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 				// After setting the Authentication in the context, we specify
 				// that the current user is authenticated. So it passes the Spring Security Configurations successfully.
+				System.out.println(usernamePasswordAuthenticationToken);
 				SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 			}
 		}

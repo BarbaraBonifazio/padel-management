@@ -34,7 +34,7 @@ public class JwtUserDetailsService implements UserDetailsService {
         return new UserPrincipal(user);
     }
 
-    public Optional<User> findUserByUSername(String username) {
+    public Optional<User> findUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
         
@@ -44,7 +44,7 @@ public class JwtUserDetailsService implements UserDetailsService {
         
         User user = userMapper.convertDtoInsertToEntity(insertUserMessageDto);
         user.setPassword(passwordEncoded);
-        user.setRole(Role.ROLE_GUEST);
+        user.setRole(Role.GUEST);
         insertUserMessageDto = userMapper.convertEntityToDtoInsert(this.userRepository.save(user));
         return insertUserMessageDto;
     }
