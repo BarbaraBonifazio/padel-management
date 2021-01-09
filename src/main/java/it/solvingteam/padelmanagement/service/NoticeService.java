@@ -1,4 +1,4 @@
-package it.solvingteam.padelmanagement;
+package it.solvingteam.padelmanagement.service;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,8 +15,6 @@ import it.solvingteam.padelmanagement.model.club.Club;
 import it.solvingteam.padelmanagement.model.notice.Notice;
 import it.solvingteam.padelmanagement.model.player.Player;
 import it.solvingteam.padelmanagement.repository.NoticeRepository;
-import it.solvingteam.padelmanagement.service.ClubService;
-import it.solvingteam.padelmanagement.service.PlayerService;
 
 @Service
 public class NoticeService {

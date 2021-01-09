@@ -45,7 +45,15 @@ public class JoinProposalValidator implements Validator{
 		for(NewClubProposal newClubProposal : newClubProposals) {
 			if(newClubProposal.getProposalStatus() == ProposalStatus.PENDING) {
 				errors.rejectValue("proposalStatus", "proposalStatusPendingExists", 
-							"Non puoi aderire ad un circolo esistente se hai fatto richiesta di creazione di un Nuovo Circolo!");
+							"Da questo Account risulta effettuata una richiesta di creazione per un Nuovo Circolo " +
+									"attualmente in stato: " + newClubProposal.getProposalStatus() + "! " +
+							 "Pertanto non puoi effettuare una richiesta di Adesione ad un circolo esistente!");
+			}
+			
+			if(newClubProposal.getProposalStatus() == ProposalStatus.APPROVED) {
+				errors.rejectValue("proposalStatus", "proposalStatusPendingExists", 
+							"La tua richiesta di creazione del circolo " + newClubProposal.getName() + " è stata approvata "
+									+ "pertanto non puoi più effettuare una richiesta di Adesione ad un circolo esistente con questo Account!");
 			}
 		}
 	}

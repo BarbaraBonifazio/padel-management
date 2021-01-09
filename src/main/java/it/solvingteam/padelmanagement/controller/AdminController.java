@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import it.solvingteam.padelmanagement.NoticeService;
 import it.solvingteam.padelmanagement.dto.CourtDto;
 import it.solvingteam.padelmanagement.dto.JoinProposalDto;
 import it.solvingteam.padelmanagement.dto.NoticeDto;
@@ -29,6 +28,7 @@ import it.solvingteam.padelmanagement.model.admin.Admin;
 import it.solvingteam.padelmanagement.service.AdminService;
 import it.solvingteam.padelmanagement.service.CourtService;
 import it.solvingteam.padelmanagement.service.JoinProposalService;
+import it.solvingteam.padelmanagement.service.NoticeService;
 import it.solvingteam.padelmanagement.util.TokenDecripter;
 import it.solvingteam.padelmanagement.validator.CourtUpdateValidator;
 import it.solvingteam.padelmanagement.validator.CourtValidator;

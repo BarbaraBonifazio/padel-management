@@ -41,5 +41,19 @@ public class InsertJoinProposalDto {
 		this.clubIdDto = clubIdDto;
 	}
 
+	@Override
+	public String toString() {
+		return "Nome: " + userDto.getName() +
+				"\n" +
+				"Cognome: " + userDto.getSurname() + 
+				"\n" +
+				"Username: " + userDto.getSurname() + 
+				"\n" +
+				"Data di nascita: " + userDto.getDateOfBirth() + 
+				"\n" + 
+				"Telefono: " + userDto.getMobile() +
+				"\n" + 
+				"Ruolo: " + userDto.getRole();
+	}
 	
 }
